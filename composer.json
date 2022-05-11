@@ -1,0 +1,58 @@
+{
+    "name": "clevyr/nova-filemanager",
+    "description": "Filemanager tool for Laravel Nova",
+    "keywords": [
+        "laravel",
+        "nova",
+        "filemanager"
+    ],
+    "homepage": "https://github.com/clevyr/nova-filemanager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Clevyr",
+            "email": "support@clevyr.com",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Eric Lagarda",
+            "email": "eric@infinety.es",
+            "role": "Developer"
+        },
+        {
+            "name": "InfinetyEs",
+            "email": "apps@infinety.es",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "laravel/nova": "~2.0|~3.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.6",
+        "phpunit/phpunit": "7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Clevyr\\Filemanager\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Clevyr\\Filemanager\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Clevyr\\Filemanager\\FilemanagerServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
