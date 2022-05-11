@@ -1,10 +1,8 @@
 # Clevyr Nova Filemanager
 
-This is a fork of https://github.com/mucenica-bogdan/Nova-Filemanager that is a laravel 9 fix fork of https://infinetyes.github.io/Nova-Filemanager  
-
 This package will be maintained and updated by Clevyr going forward. This package is currently compatible with Nova 3 and Laravel 9.
 
-Read the docs at https://infinetyes.github.io/Nova-Filemanager/
+Read the full docs at https://infinetyes.github.io/Nova-Filemanager/ 
 
 ## Installation
 ```
