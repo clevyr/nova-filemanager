@@ -58,15 +58,28 @@ trait GetFiles
 
     protected function listContents(string $folder)
     {
-        return $this->storage->listContents($folder)->map(fn(StorageAttributes $attributes) => [
-            'type' => $attributes->type(),
-            'basename' => basename($attributes->path()),
-            'path' => $attributes->path(),
-            'size' => $attributes instanceof FileAttributes ? $attributes->fileSize() : 0,
-            'visibility' => $attributes->visibility(),
-            'lastModified' => $attributes->lastModified(),
-            'mimeType' => $attributes instanceof FileAttributes ? $this->storage->mimeType($attributes->path()) : null,
-        ])->toArray();
+        $storageContents = $this->storage->listContents($folder);
+        $returnArray = [];
+
+        foreach ($storageContents as $file) {
+            $mime = null;
+            try {
+                $mime = $this->storage->mimeType($file->path());
+            } catch (\Exception $e) {
+                $mime = null;
+            }
+            $returnArray[] = [
+                'type' => $file->type(),
+                'basename' => basename($file->path()),
+                'path' => $file->path(),
+                'size' => $file instanceof FileAttributes ? $file->fileSize() : 0,
+                'visibility' => $file->visibility(),
+                'lastModified' => $file->lastModified(),
+                'mimeType' => $mime,
+            ];
+        }
+
+        return $returnArray;
     }
 
     /**
