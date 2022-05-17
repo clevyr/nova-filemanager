@@ -53,7 +53,7 @@
                 @delete="openDeleteModal"
                 @multiDelete="openMultiDeleteModal"
                 @select="select"
-                @createFolder="showModalCreateFolder"
+                @create-folder="showModalCreateFolder"
             />
 
             <UploadProgress

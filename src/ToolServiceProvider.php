@@ -1,12 +1,12 @@
 <?php
 
-namespace Clevyr\NovaFilemanager;
+namespace Clevyr\Filemanager;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
-use Clevyr\NovaFilemanager\Http\Middleware\Authorize;
+use Clevyr\Filemanager\Http\Middleware\Authorize;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -44,7 +44,7 @@ class ToolServiceProvider extends ServiceProvider
             ->group(__DIR__ . '/../routes/inertia.php');
 
         Route::middleware(['nova', Authorize::class])
-            ->namespace('Clevyr\NovaFilemanager\Http\Controllers')
+            ->namespace('Clevyr\Filemanager\Http\Controllers')
             ->prefix('nova-vendor/clevyr/nova-filemanager')
             ->group(__DIR__ . '/../routes/api.php');
     }

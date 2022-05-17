@@ -1,16 +1,16 @@
 <?php
 
-namespace Clevyr\NovaFilemanager\Http\Services;
+namespace Clevyr\Filemanager\Http\Services;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Clevyr\NovaFilemanager\Events\FileRemoved;
-use Clevyr\NovaFilemanager\Events\FileUploaded;
-use Clevyr\NovaFilemanager\Events\FolderRemoved;
-use Clevyr\NovaFilemanager\Events\FolderUploaded;
-use Clevyr\NovaFilemanager\Http\Exceptions\InvalidConfig;
+use Clevyr\Filemanager\Events\FileRemoved;
+use Clevyr\Filemanager\Events\FileUploaded;
+use Clevyr\Filemanager\Events\FolderRemoved;
+use Clevyr\Filemanager\Events\FolderUploaded;
+use Clevyr\Filemanager\Http\Exceptions\InvalidConfig;
 use InvalidArgumentException;
 
 class FileManagerService

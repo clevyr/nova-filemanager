@@ -1,10 +1,10 @@
 <?php
 
-namespace Clevyr\NovaFilemanager\Http\Controllers;
+namespace Clevyr\Filemanager\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Clevyr\NovaFilemanager\Http\Services\FileManagerService;
+use Clevyr\Filemanager\Http\Services\FileManagerService;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class FilemanagerToolController extends Controller

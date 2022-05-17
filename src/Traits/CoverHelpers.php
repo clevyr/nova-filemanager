@@ -1,6 +1,6 @@
 <?php
 
-namespace Clevyr\NovaFilemanager\Traits;
+namespace Clevyr\Filemanager\Traits;
 
 trait CoverHelpers
 {

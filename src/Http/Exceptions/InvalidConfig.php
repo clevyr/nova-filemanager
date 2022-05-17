@@ -1,6 +1,6 @@
 <?php
 
-namespace Clevyr\NovaFilemanager\Http\Exceptions;
+namespace Clevyr\Filemanager\Http\Exceptions;
 
 use Exception;
 

@@ -34,7 +34,7 @@
 
             <DefaultButton
                 v-if="buttons.create_folder"
-                @click="$emit('createFolder')"
+                @click.prevent.stop="$emit('createFolder')"
                 class="mr-2"
             >
                 {{ __('Create folder') }}
@@ -160,7 +160,8 @@
 <!--            </div>-->
 <!--        </div>-->
 
-        <div v-if="!uploadingFiles" class="p-2 overflow-y-auto flex flex-wrap" style="height: 75vh;max-height: 450px;">
+        <div v-if="!uploadingFiles" class="p-2 overflow-y-auto flex flex-wrap relative" style="height: 75vh;max-height:
+        450px;">
             <Heading
                 v-if="files.error"
                 level="3"
@@ -439,6 +440,8 @@
         directives: {
             'drag-and-drop': DragAndDrop,
         },
+
+        emits: ['createFolder'],
 
         methods: {
             viewAs(type) {

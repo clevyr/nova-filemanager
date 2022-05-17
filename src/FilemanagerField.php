@@ -1,10 +1,10 @@
 <?php
 
-namespace Clevyr\NovaFilemanager;
+namespace Clevyr\Filemanager;
 
 use Illuminate\Validation\Rule;
-use Clevyr\NovaFilemanager\Http\Services\FileManagerService;
-use Clevyr\NovaFilemanager\Traits\CoverHelpers;
+use Clevyr\Filemanager\Http\Services\FileManagerService;
+use Clevyr\Filemanager\Traits\CoverHelpers;
 use Laravel\Nova\Contracts\Cover;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;

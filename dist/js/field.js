@@ -241,6 +241,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   directives: {
     'drag-and-drop': _tools_DragAndDrop__WEBPACK_IMPORTED_MODULE_7__.DragAndDrop
   },
+  emits: ['createFolder'],
   methods: {
     viewAs: function viewAs(type) {
       this.view = type;
@@ -1102,7 +1103,7 @@ __webpack_require__.r(__webpack_exports__);
       var index = this.filesToUpload.map(function (item) {
         return item.id;
       }).indexOf(uploadedFileId);
-      this.$delete(this.filesToUpload, index);
+      this.filesToUpload.splice(index, 1);
 
       if (this.filesToUpload.length === 0) {
         if (this.uploadType == 'folders') {
@@ -2536,59 +2537,51 @@ var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 var _hoisted_21 = [_hoisted_20];
 var _hoisted_22 = {
   key: 0,
-  "class": "overflow-y-auto p-4"
-};
-var _hoisted_23 = {
-  "class": "h-40 flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-700 border-dashed"
-};
-var _hoisted_24 = {
-  key: 1,
-  "class": "p-2 overflow-y-auto flex flex-wrap",
+  "class": "p-2 overflow-y-auto flex flex-wrap relative",
   style: {
-    "height": "75vh",
-    "max-height": "450px"
+    "height": "75vh"
   }
 };
-var _hoisted_25 = {
+var _hoisted_23 = {
   key: 1,
   "class": "flex items-center justify-center flex-grow py-4 px-2"
 };
-var _hoisted_26 = {
+var _hoisted_24 = {
   key: 2,
   "class": "w-full h-full flex flex-col items-center justify-center py-4"
 };
-var _hoisted_27 = {
+var _hoisted_25 = {
   key: 1,
   "class": "p-2 w-full"
 };
-var _hoisted_28 = {
+var _hoisted_26 = {
   key: 0,
   "class": "w-full table-default"
 };
-var _hoisted_29 = {
+var _hoisted_27 = {
   key: 0,
   width: "30",
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 };
 
-var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   width: "50",
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_31 = {
+var _hoisted_29 = {
   "class": "p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 };
-var _hoisted_32 = {
+var _hoisted_30 = {
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 };
-var _hoisted_33 = {
+var _hoisted_31 = {
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 };
 
-var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 }, null, -1
 /* HOISTED */
@@ -2644,9 +2637,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* HYDRATE_EVENTS */
   )])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.buttons.create_folder ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_DefaultButton, {
     key: 1,
-    onClick: _cache[2] || (_cache[2] = function ($event) {
+    onClick: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
       return _ctx.$emit('createFolder');
-    }),
+    }, ["prevent", "stop"])),
     "class": "mr-2"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -2791,19 +2784,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     );
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])]), _ctx.uploadingFiles ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Heading, {
-    level: "1",
-    "class": "w-full text-center py-4"
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Drop your files here!')), 1
-      /* TEXT */
-      )];
-    }),
-    _: 1
-    /* STABLE */
-
-  })])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [$props.files.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Heading, {
+  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            v-if=\"uploadingFiles\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            class=\"overflow-y-auto p-4\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        >"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <div class=\"h-40 flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-700 border-dashed\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                <Heading level=\"1\" class=\"w-full text-center py-4\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    {{ __('Drop your files here!') }}"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                </Heading>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        </div>"), !_ctx.uploadingFiles ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [$props.files.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Heading, {
     key: 0,
     level: "3",
     "class": "w-full text-center py-4 px-2"
@@ -2816,7 +2797,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Loader)])) : !$props.files.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Heading, {
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Loader)])) : !$props.files.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Heading, {
     level: "3",
     "class": "w-full text-center mb-4"
   }, {
@@ -2915,13 +2896,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* KEYED_FRAGMENT */
   ))], 64
   /* STABLE_FRAGMENT */
-  )) : _ctx.view == 'list' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, [$props.files.length > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("table", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [$props.multiSelecting ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_29)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Name')), 1
+  )) : _ctx.view == 'list' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [$props.files.length > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("table", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [$props.multiSelecting ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_27)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Name')), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Size')), 1
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Size')), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Last Modification')), 1
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Last Modification')), 1
   /* TEXT */
-  ), _hoisted_34])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [$props.parent.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Folder, {
+  ), _hoisted_32])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [$props.parent.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Folder, {
     ref: 'folder_' + $props.parent.id,
     key: $props.parent.id,
     "data-key": $props.parent.id,
@@ -2985,7 +2966,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* UNKEYED_FRAGMENT */
   ))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))], 512
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 512
   /* NEED_PATCH */
   );
 }
@@ -3006,21 +2987,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
-var _hoisted_1 = {
-  "class": "card relative"
-};
-function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_vue_dropzone = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("vue-dropzone");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_vue_dropzone, {
-    ref: "dropzone",
-    id: 'upload',
-    options: _ctx.dropzoneOptions,
-    onVdropzoneSuccess: $options.vsuccess,
-    onVdropzoneSending: $options.sendingEvent
-  }, null, 8
-  /* PROPS */
-  , ["options", "onVdropzoneSuccess", "onVdropzoneSending"])])]);
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "card relative"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <vue-dropzone"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                ref=\"dropzone\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                :id=\"'upload'\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                :options=\"dropzoneOptions\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                @vdropzone-success=\"vsuccess\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                @vdropzone-sending=\"sendingEvent\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            />")], -1
+/* HOISTED */
+);
+
+var _hoisted_2 = [_hoisted_1];
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_2);
 }
 
 /***/ }),
@@ -3261,6 +3237,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_CreateFolderModal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("CreateFolderModal");
 
+  var _component_UploadProgress = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("UploadProgress");
+
   var _component_FileSelect = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FileSelect");
 
   var _component_Icon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Icon");
@@ -3319,7 +3297,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onRefresh: $options.refreshCurrent
       }, null, 8
       /* PROPS */
-      , ["active", "current", "onCloseCreateFolderModal", "onRefresh"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <UploadProgress\n                ref=\"uploader\"\n                :current=\"currentPath\"\n                :visibility=\"currentField.visibility\"\n                :rules=\"currentField.upload_rules\"\n                @removeFile=\"removeFileFromUpload\"\n            ></UploadProgress> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FileSelect, {
+      , ["active", "current", "onCloseCreateFolderModal", "onRefresh"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_UploadProgress, {
+        ref: "uploader",
+        current: _ctx.currentPath,
+        visibility: _ctx.currentField.visibility,
+        rules: _ctx.currentField.upload_rules,
+        onRemoveFile: $options.removeFileFromUpload
+      }, null, 8
+      /* PROPS */
+      , ["current", "visibility", "rules", "onRemoveFile"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FileSelect, {
         id: _ctx.currentField.name,
         field: _ctx.currentField,
         "is-readonly": _ctx.currentField.readonly,
@@ -3850,7 +3836,7 @@ __webpack_require__.r(__webpack_exports__);
 var _hoisted_1 = {
   "class": "mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden",
   style: {
-    "max-width": "1080px"
+    "max-width": "1200px"
   }
 };
 var _hoisted_2 = {
@@ -4263,10 +4249,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onShowInfoItem: $options.showInfoItem,
         onUploadFiles: $options.uploadFiles,
         onRename: $options.openRenameModal,
-        onDelete: $options.openDeleteModal
+        onDelete: $options.openDeleteModal,
+        onCreateFolder: $options.showModalCreateFolder
       }, null, 8
       /* PROPS */
-      , ["home", "files", "path", "current", "parent", "selector", "loading", "search", "filter", "filters", "buttons", "onGoToFolderManager", "onGoToFolderManagerNav", "onRefresh", "onSelectFile", "onShowInfoItem", "onUploadFiles", "onRename", "onDelete"])])];
+      , ["home", "files", "path", "current", "parent", "selector", "loading", "search", "filter", "filters", "buttons", "onGoToFolderManager", "onGoToFolderManagerNav", "onRefresh", "onSelectFile", "onShowInfoItem", "onUploadFiles", "onRename", "onDelete", "onCreateFolder"])])];
     }),
     _: 1
     /* STABLE */

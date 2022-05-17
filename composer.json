@@ -19,13 +19,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Clevyr\\NovaFilemanager\\": "src/"
+            "Clevyr\\Filemanager\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Clevyr\\NovaFilemanager\\ToolServiceProvider"
+                "Clevyr\\Filemanager\\ToolServiceProvider"
             ]
         }
     },

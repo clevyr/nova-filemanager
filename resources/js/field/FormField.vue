@@ -39,13 +39,13 @@
                 @refresh="refreshCurrent"
             />
 
-            <!-- <UploadProgress
+            <UploadProgress
                 ref="uploader"
                 :current="currentPath"
                 :visibility="currentField.visibility"
                 :rules="currentField.upload_rules"
                 @removeFile="removeFileFromUpload"
-            ></UploadProgress> -->
+            ></UploadProgress>
 
             <FileSelect
                 :id="currentField.name"
@@ -176,7 +176,8 @@
             removeFileFromUpload(uploadedFileId) {
                 let index = this.filesToUpload.map((item) => item.id).indexOf(uploadedFileId);
 
-                this.$delete(this.filesToUpload, index);
+                this.filesToUpload.splice(index, 1);
+
                 if (this.filesToUpload.length === 0) {
                     if (this.uploadType == 'folders') {
                         this.callFolderEvent(this.folderUploadedName);

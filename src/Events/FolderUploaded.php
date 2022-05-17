@@ -1,6 +1,6 @@
 <?php
 
-namespace Clevyr\NovaFilemanager\Events;
+namespace Clevyr\Filemanager\Events;
 
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Queue\SerializesModels;

@@ -103,9 +103,9 @@ return [
     | Naming strategy
     |--------------------------------------------------------------------------
     | Resolve the upload file name with a class that extends
-    | Clevyr\NovaFilemanager\Http\Services\AbstractNamingStrategy
+    | Clevyr\Filemanager\Http\Services\AbstractNamingStrategy
      */
-    'naming'    => Clevyr\NovaFilemanager\Http\Services\DefaultNamingStrategy::class,
+    'naming'    => Clevyr\Filemanager\Http\Services\DefaultNamingStrategy::class,
 
     /*
     |--------------------------------------------------------------------------

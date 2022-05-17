@@ -1,9 +1,9 @@
 <?php
 
-namespace Clevyr\NovaFilemanager\Http\Middleware;
+namespace Clevyr\Filemanager\Http\Middleware;
 
 use Laravel\Nova\Nova;
-use Clevyr\NovaFilemanager\FilemanagerTool;
+use Clevyr\Filemanager\FilemanagerTool;
 
 class Authorize
 {

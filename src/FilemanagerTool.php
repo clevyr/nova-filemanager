@@ -1,6 +1,6 @@
 <?php
 
-namespace Clevyr\NovaFilemanager;
+namespace Clevyr\Filemanager;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Menu\MenuSection;

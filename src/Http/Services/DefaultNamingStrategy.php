@@ -1,6 +1,6 @@
 <?php
 
-namespace Clevyr\NovaFilemanager\Http\Services;
+namespace Clevyr\Filemanager\Http\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;

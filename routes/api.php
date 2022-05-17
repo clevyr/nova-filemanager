@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Clevyr\NovaFilemanager\Http\Controllers\FilemanagerToolController;
+use Clevyr\Filemanager\Http\Controllers\FilemanagerToolController;
 
 /*
 |--------------------------------------------------------------------------
