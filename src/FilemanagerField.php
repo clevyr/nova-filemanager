@@ -8,10 +8,12 @@ use Clevyr\Filemanager\Traits\CoverHelpers;
 use Laravel\Nova\Contracts\Cover;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\SupportsDependentFields;
 
 class FilemanagerField extends Field implements Cover
 {
-    use CoverHelpers;
+    use CoverHelpers,
+        SupportsDependentFields;
 
     /**
      * The field's component.
@@ -100,6 +102,31 @@ class FilemanagerField extends Field implements Cover
     public function displayAsImage()
     {
         return $this->withMeta(['display' => 'image']);
+    }
+
+    public function detailDisplayAsImage()
+    {
+        return $this->withMeta(['displayDetail' => 'image']);
+    }
+
+    public function indexDisplayAsImage()
+    {
+        return $this->withMeta(['displayIndex' => 'image']);
+    }
+
+    public function displayNormal()
+    {
+        return $this->withMeta(['display' => 'normal']);
+    }
+
+    public function detailDisplayNormal()
+    {
+        return $this->withMeta(['displayDetail' => 'normal']);
+    }
+
+    public function indexDisplayNormal()
+    {
+        return $this->withMeta(['displayIndex' => 'normal']);
     }
 
     /**

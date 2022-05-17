@@ -25,14 +25,20 @@
             "role": "Developer"
         }
     ],
-    "require": {
-        "php": ">=7.1.0",
-        "laravel/nova": "~2.0|~3.0"
-    },
     "require-dev": {
         "orchestra/testbench": "^3.6",
         "phpunit/phpunit": "7.1"
     },
+    "require": {
+        "php": ">=7.1.0",
+        "laravel/nova": "^4.0"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../vendor/laravel/nova"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Clevyr\\Filemanager\\": "src/"
@@ -46,7 +52,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Clevyr\\Filemanager\\FilemanagerServiceProvider"
+                "Clevyr\\Filemanager\\ToolServiceProvider"
             ]
         }
     },

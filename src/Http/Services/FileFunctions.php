@@ -29,7 +29,7 @@ trait FileFunctions
         $unit = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $times = floor(log($size, $base));
 
-        return sprintf('%.'.$precision.'f', $size / pow($base, ($times + $level))).' '.$unit[$times + $level];
+        return sprintf('%.' . $precision . 'f', $size / pow($base, ($times + $level))) . ' ' . $unit[$times + $level];
     }
 
     /**
@@ -53,7 +53,7 @@ trait FileFunctions
      */
     public function fixFilename($str)
     {
-        if (! mb_detect_encoding($str, 'UTF-8', true)) {
+        if (!mb_detect_encoding($str, 'UTF-8', true)) {
             $str = utf8_encode($str);
         }
         if (function_exists('transliterator_transliterate')) {

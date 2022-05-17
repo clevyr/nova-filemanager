@@ -1,9 +1,5 @@
-Nova.booting((Vue, router) => {
-    router.addRoutes([
-        {
-            name: 'nova-filemanager',
-            path: '/nova-filemanager',
-            component: require('./components/Tool'),
-        },
-    ]);
-});
+import Tool from './pages/Tool'
+
+Nova.booting((app, store) => {
+    Nova.inertia('Filemanager', Tool)
+})

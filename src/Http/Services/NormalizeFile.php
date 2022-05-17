@@ -147,10 +147,6 @@ class NormalizeFile
         if (Str::contains($mime, 'image') || $extension == 'svg') {
             return $this->storage->url($this->storagePath);
         }
-
-        $fileType = new FileTypesImages();
-
-        return $fileType->getImage($mime);
     }
 
     /**
@@ -165,8 +161,8 @@ class NormalizeFile
         if (Str::contains($mime, 'image')) {
             [$width, $height] = getimagesize($this->storage->path($this->storagePath));
 
-            if (! empty($width) && ! empty($height)) {
-                return $width.'x'.$height;
+            if (!empty($width) && !empty($height)) {
+                return $width . 'x' . $height;
             }
         }
 

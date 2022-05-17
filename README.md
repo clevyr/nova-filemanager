@@ -1,8 +1,22 @@
-# Clevyr Nova Filemanager
+# Filemanager tool for Laravel Nova 4
+
+A Filemanager Tool and Field for Laravel Nova 4
+
+##### Filemanager Tool preview
+
+![FileManager Tool](https://user-images.githubusercontent.com/42798230/44862985-d3d57b80-ac73-11e8-9169-2e76a3584ea4.gif)
+
+##### Filemanager Field preview
+
+![FileManager Field](https://user-images.githubusercontent.com/42798230/44864362-5f9cd700-ac77-11e8-9e0f-330d18a81598.gif)
+
+## Clevyr Nova Filemanager
 
 This package will be maintained and updated by Clevyr going forward. This package is currently compatible with Nova 3 and Laravel 9.
 
-Read the full docs at https://infinetyes.github.io/Nova-Filemanager/ 
+### Docs
+Forked from https://github.com/stepanenko3/nova-filemanager, which is a fork of https://github.
+com/InfinetyEs/Nova-Filemanager/
 
 ## Installation
 ```
@@ -23,122 +37,4 @@ public function tools()
         new \Clevyr\Filemanager\FilemanagerTool(),
     ];
 }
-```
-
-## Config File
-```
-return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Filemanager Disk
-    |--------------------------------------------------------------------------
-    | This is the storage disk FileManager will use to put file uploads, you can use
-    | any of the disks defined in your config/filesystems.php file. Default to public.
-     */
-    'disk'      => env('FILEMANAGER_DISK', 'public'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Filemanager default order
-    |--------------------------------------------------------------------------
-    | This will set the default order of the files and folders.
-    | You can use mime, name or size. Default to mime
-     */
-    'order'     => env('FILEMANAGER_ORDER', 'mime'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Filemanager default order direction
-    |--------------------------------------------------------------------------
-    | This will set the default order direction of the files and folders.
-    | You can use asc or desc. Default to asc
-     */
-    'direction' => env('FILEMANAGER_DIRECTION', 'asc'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Filemanager cache
-    |--------------------------------------------------------------------------
-    | This will set the cache of filemenager. Filemanager creates a  md5 using file
-    | info. This is useful when s3 is being used or when needs to read a lot of files.
-    | Cache is set by file, not by folder. Default to false.
-     */
-    'cache'     => env('FILEMANAGER_CACHE', false),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Configurable buttons
-    |--------------------------------------------------------------------------
-    | This will hide or show filemanager buttons. You can enable o disable buttons
-    | as your own needs. True means visible. False hidden.
-     */
-    'buttons'   => [
-
-        // Menu
-        'create_folder'   => true,
-        'upload_button'   => true,
-        'select_multiple' => true,
-
-        // Folders
-        'rename_folder'   => true,
-        'delete_folder'   => true,
-
-        // Files
-        'rename_file'     => true,
-        'delete_file'     => true,
-
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Filemanager  filters
-    |--------------------------------------------------------------------------
-    | This option let you to filter your files by extensions.
-    | You can create|modify|delete as you want.
-     */
-
-    'filters'   => [
-
-        'Images'     => ['jpg', 'jpeg', 'png', 'gif', 'svg', 'bmp', 'tiff'],
-
-        'Documents'  => ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pps', 'pptx', 'odt', 'rtf', 'md', 'txt', 'css'],
-
-        'Videos'     => ['mp4', 'avi', 'mov', 'mkv', 'wmv', 'flv', '3gp', 'h264'],
-
-        'Audios'     => ['mp3', 'ogg', 'wav', 'wma', 'midi'],
-
-        'Compressed' => ['zip', 'rar', 'tar', 'gz', '7z', 'pkg'],
-
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Filemanager  default filter
-    |--------------------------------------------------------------------------
-    | This will set the default filter for all your Filemanager. You should use one
-    | of the keys used in filters in lowercase. If you have a key called Documents,
-    | use 'documents' as your default filter. Default to false
-     */
-    'filter'    => false,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Naming strategy
-    |--------------------------------------------------------------------------
-    | Resolve the upload file name with a class that extends
-    | Infinety\Filemanager\Http\Services\AbstractNamingStrategy
-     */
-    'naming'    => Clevyr\Filemanager\Http\Services\DefaultNamingStrategy::class,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Post Processing jobs of files
-    |--------------------------------------------------------------------------
-    | You can set post upload jobs for each file uploaded. You should use one
-    | of the keys used in filters in lowercase. If you have a key called Documents,
-    | use 'documents' as your default filter.
-     */
-    'jobs'      => [],
-];
 ```

@@ -16,7 +16,7 @@ class DefaultNamingStrategy extends AbstractNamingStrategy
     {
         $filename = $file->getClientOriginalName();
 
-        while ($this->storage->has($currentFolder.'/'.$filename)) {
+        while ($this->storage->exists($currentFolder . '/' . $filename)) {
             $filename = sprintf(
                 '%s_%s.%s',
                 pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),

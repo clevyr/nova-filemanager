@@ -1,5 +1,5 @@
 export const DragAndDrop = {
-    bind: function(el, binding, vnode) {
+    bind: function (el, binding, vnode) {
         var element = vnode.componentInstance;
         var instance = vnode.context;
         var folder = false;
@@ -8,13 +8,13 @@ export const DragAndDrop = {
             folder = instance.getFileById('folder', element.file.id);
         }
 
-        instance.handleDragStart = function() {
+        instance.handleDragStart = function () {
             instance.currentDraggedFile = element;
 
             instance.$emit('drag-start');
         }.bind(instance);
 
-        instance.handleDragOver = function(e) {
+        instance.handleDragOver = function (e) {
             if (e.preventDefault) {
                 e.preventDefault();
             }
@@ -25,20 +25,20 @@ export const DragAndDrop = {
             return false;
         }.bind(instance);
 
-        instance.handleDragLeave = function() {
+        instance.handleDragLeave = function () {
             folder.dragOver = false;
             // instance.currentDraggedFile = null;
         }.bind(instance);
 
-        instance.handleDragEnd = function() {
+        instance.handleDragEnd = function () {
             instance.currentDraggedFile = null;
         }.bind(instance);
 
-        instance.handleDrag = function() {
+        instance.handleDrag = function () {
             instance.$emit('drag');
         }.bind(instance);
 
-        instance.handleDrop = function(e) {
+        instance.handleDrop = function (e) {
             e.preventDefault();
             if (e.stopPropagation) {
                 e.stopPropagation();
@@ -68,7 +68,7 @@ export const DragAndDrop = {
             el.addEventListener('drop', instance.handleDrop, false);
         }
     },
-    unbind: function(el, binding, vnode) {
+    unbind: function (el, binding, vnode) {
         var instance = vnode.context;
         instance.currentDraggedFile = null;
 

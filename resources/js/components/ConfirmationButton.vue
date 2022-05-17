@@ -1,25 +1,45 @@
 <template>
-    <button
-        :class="[ css, stepsComplete? 'confirmation__button--complete' : '' ]"
-        :disabled='stepsComplete'
-        v-on:click='incrementStep()'>
+    <component
+        ref="button"
+        v-bind="{ size, align, ...$attrs }"
+        :is="component"
+        :disabled="stepsComplete"
+        @click="incrementStep()"
+    >
+        <slot name="start" v-if="currentStep === 0" />
+        <slot name="finish" v-if="stepsComplete" />
         {{ currentMessage }}
-    </button>
+    </component>
 </template>
 
 <script>
 export default {
-    name: 'confirmation-button',
     props: {
-        messages: Array,
-        css: {
+        size: {
             type: String,
-            default: 'confirmation__button',
+            default: 'lg',
+        },
+        align: {
+            type: String,
+            default: 'center',
+            validator: v => ['left', 'center'].includes(v),
+        },
+        component: {
+            type: String,
+            default: 'DangerButton',
+        },
+        messages: {
+            type: Array,
+            default: [],
         },
     },
     data() {
         return {
-            defaultSteps: ['Click to confirm', 'Are you sure?', '✔'],
+            defaultSteps: [
+                this.__('Click to confirm'),
+                this.__('Are you sure?'),
+                this.__('✔'),
+            ],
             currentStep: 0,
         };
     },
@@ -41,24 +61,16 @@ export default {
         incrementStep() {
             this.currentStep++;
             if (this.stepsComplete) {
-                this.$emit('confirmation-success');
+                this.$emit('success');
             } else {
-                this.$emit('confirmation-incremented');
+                this.$emit('incremented');
             }
-
-            setTimeout(
-                function() {
-                    this.currentStep = 0;
-                }.bind(this),
-                3000
-            );
+            setTimeout(() => this.currentStep = 0, 3000);
         },
         reset() {
             this.currentStep = 0;
-            this.$emit('confirmation-reset');
+            this.$emit('reset');
         },
     },
 };
 </script>
-<style>
-</style>

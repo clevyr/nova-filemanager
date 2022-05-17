@@ -1,28 +1,26 @@
 <template>
     <div>
         <div class="card relative">
-            <vue-dropzone
-                ref="dropzone"
-                :id="'upload'"
-                :options="dropzoneOptions"
-                v-on:vdropzone-success="vsuccess"
-                v-on:vdropzone-sending="sendingEvent"
-            />
+            <!--            <vue-dropzone-->
+            <!--                ref="dropzone"-->
+            <!--                :id="'upload'"-->
+            <!--                :options="dropzoneOptions"-->
+            <!--                @vdropzone-success="vsuccess"-->
+            <!--                @vdropzone-sending="sendingEvent"-->
+            <!--            />-->
         </div>
     </div>
 </template>
 
 <script>
-import vue2Dropzone from 'vue2-dropzone';
-import 'vue2-dropzone/dist/vue2Dropzone.min.css';
-
+// import vue2Dropzone from 'vue2-dropzone';
+// import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 let token = document.head.querySelector('meta[name="csrf-token"]');
-
 export default {
     props: {
         options: {
             type: Object,
-            default: function() {
+            default: function () {
                 return { message: 'hello' };
             },
             required: false,
@@ -33,15 +31,13 @@ export default {
             required: true,
         },
     },
-
     components: {
-        vueDropzone: vue2Dropzone,
+        // vueDropzone: vue2Dropzone,
     },
-
     data: () => ({
         token: token.content,
         dropzoneOptions: {
-            url: '/nova-vendor/clevyr/nova-filemanager/uploads/add',
+            url: '/nova-vendor/Clevyr/nova-filemanager/uploads/add',
             thumbnailWidth: 200,
             addRemoveLinks: true,
             dictDefaultMessage:
@@ -52,24 +48,20 @@ export default {
     mounted() {
         //
     },
-
     methods: {
         sendingEvent(file, xhr, formData) {
             formData.append('current', this.current);
         },
-
         vsuccess(file, response) {
             if (response.success == true) {
                 this.$refs.dropzone.removeFile(file);
-                this.$toasted.show(
-                    this.__('File') + ' ' + response.name + ' ' + this.__('uploaded successfully'),
-                    { type: 'success' }
+                Nova.success(
+                    this.__('File') + ' ' + response.name + ' ' + this.__('uploaded successfully')
                 );
                 this.$emit('refresh', true);
             } else {
-                this.$toasted.show(
-                    this.__('Error uploading the file. Check your MaxFilesize or permissions'),
-                    { type: 'error' }
+                Nova.error(
+                    this.__('Error uploading the file. Check your MaxFilesize or permissions')
                 );
             }
         },
@@ -77,7 +69,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style>
 .h-16 {
     height: 4rem;
 }
