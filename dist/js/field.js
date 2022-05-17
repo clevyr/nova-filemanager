@@ -2539,7 +2539,7 @@ var _hoisted_22 = {
   key: 0,
   "class": "p-2 overflow-y-auto flex flex-wrap relative",
   style: {
-    "height": "75vh"
+    "height": "55vh"
   }
 };
 var _hoisted_23 = {

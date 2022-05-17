@@ -160,8 +160,7 @@
 <!--            </div>-->
 <!--        </div>-->
 
-        <div v-if="!uploadingFiles" class="p-2 overflow-y-auto flex flex-wrap relative" style="height: 75vh;max-height:
-        450px;">
+        <div v-if="!uploadingFiles" class="p-2 overflow-y-auto flex flex-wrap relative" style="height: 55vh">
             <Heading
                 v-if="files.error"
                 level="3"
