@@ -67,10 +67,5 @@ class ToolServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/' => config_path('filemanager.php'),
             ], 'filemanager-config');
         }
-
-        $this->mergeConfigFrom(
-            __DIR__ . '/../config/nova-filemanager.php',
-            'nova-filemanager'
-        );
     }
 }
