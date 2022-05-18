@@ -24,7 +24,7 @@ composer install clevyr/nova-filemanager
 ```
 then
 ```
-php artisan vendor:publish --tag=filemanager-config
+php artisan vendor:publish --tag=clevyr-nova-filemanager
 ```
 Also, you must register the tool with Nova. This is typically done in the tools method of the NovaServiceProvider.
 ```

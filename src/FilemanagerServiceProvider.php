@@ -17,18 +17,14 @@ class FilemanagerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/../config/config.php' => config_path('filemanager.php'),
-        ], 'filemanager-config');
-
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'nova-filemanager');
+        $this->config();
 
         $this->app->booted(function () {
             $this->routes();
         });
 
         Nova::serving(function (ServingNova $event) {
-            Nova::script('filemanager-field', __DIR__.'/../dist/js/field.js');
+            Nova::script('filemanager-field', __DIR__ . '/../dist/js/field.js');
             // Nova::style('filemanager-field', __DIR__.'/../dist/css/field.css');
         });
     }
@@ -44,10 +40,13 @@ class FilemanagerServiceProvider extends ServiceProvider
             return;
         }
 
+        Nova::router(['nova', Authorize::class], config('nova-filemanager.path', 'filemanager'))
+            ->group(__DIR__ . '/../routes/inertia.php');
+
         Route::middleware(['nova', Authorize::class])
             ->namespace('Clevyr\Filemanager\Http\Controllers')
             ->prefix('nova-vendor/clevyr/nova-filemanager')
-            ->group(__DIR__.'/../routes/api.php');
+            ->group(__DIR__ . '/../routes/api.php');
     }
 
     /**
@@ -58,5 +57,15 @@ class FilemanagerServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    private function config()
+    {
+        if ($this->app->runningInConsole()) {
+            // Publish config
+            $this->publishes([
+                __DIR__ . '/../config/config.php' => config_path('filemanager.php'),
+            ], 'clevyr-nova-filemanager');
+        }
     }
 }

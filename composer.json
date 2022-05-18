@@ -52,7 +52,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Clevyr\\Filemanager\\ToolServiceProvider"
+                "Clevyr\\Filemanager\\FilemanagerServiceProvider"
             ]
         }
     },
