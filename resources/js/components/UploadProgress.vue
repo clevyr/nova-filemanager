@@ -107,7 +107,6 @@ export default {
     }),
     methods: {
         truncate(text, stop, clamp) {
-            console.dir(text);
             return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '');
         },
         isImage(file) {

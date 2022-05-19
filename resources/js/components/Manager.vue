@@ -149,18 +149,7 @@
             </nav>
         </div>
 
-        <!--        <div-->
-        <!--            v-if="uploadingFiles"-->
-        <!--            class="overflow-y-auto p-4"-->
-        <!--        >-->
-        <!--            <div class="h-40 flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-700 border-dashed">-->
-        <!--                <Heading level="1" class="w-full text-center py-4">-->
-        <!--                    {{ __('Drop your files here!') }}-->
-        <!--                </Heading>-->
-        <!--            </div>-->
-        <!--        </div>-->
-
-        <div v-if="!uploadingFiles" class="p-2 overflow-y-auto flex flex-wrap relative" style="height: 55vh">
+        <div class="p-2 overflow-y-auto flex flex-wrap relative min-h-40" style="height: 55vh">
             <Heading
                 v-if="files.error"
                 level="3"
@@ -173,23 +162,36 @@
                 <Loader />
             </div>
 
-            <div
-                v-else-if="!files.length"
-                class="w-full h-full flex flex-col items-center justify-center py-4"
-            >
-                <Heading
-                    level="3"
-                    class="w-full text-center mb-4"
+            <div v-else class="w-full">
+                <div
+                    v-if="uploadingFiles"
+                    class="overflow-y-auto p-4 absolute top-0 left-0 h-full w-full min-h-40] z-[100]"
+                    style="background: rgba(255,255,255,0.9)"
                 >
-                    {{ __(`No ${filter || 'files or folders'} in current directory`) }}
-                </Heading>
+                    <div
+                        class="flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-700 border-dashed h-full">
+                        <Upload :currentPath="current" @refreshFiles="$emit('refresh')" />
+                    </div>
+                </div>
 
-                <DangerButton
-                    v-if="buttons.delete_folder && !filter"
-                    @click="removeDirectory"
+                <div
+                    v-else-if="!files.length"
+                    class="w-full h-full flex flex-col items-center justify-center py-4"
                 >
-                    {{ __('Remove directory') }}
-                </DangerButton>
+                    <Heading
+                        level="3"
+                        class="w-full text-center mb-4"
+                    >
+                        {{ __(`No ${filter || 'files or folders'} in current directory`) }}
+                    </Heading>
+
+                    <DangerButton
+                        v-if="buttons.delete_folder && !filter"
+                        @click="removeDirectory"
+                    >
+                        {{ __('Remove directory') }}
+                    </DangerButton>
+                </div>
             </div>
 
             <template v-if="!files.error">
@@ -345,8 +347,12 @@ import api from '../api';
 import ImageLoader from '../modules/ImageLoader';
 import Folder from '../modules/Folder';
 import { DragAndDrop } from '../tools/DragAndDrop';
+import Upload from "./Upload";
+import { Inertia } from '@inertiajs/inertia'
+
 export default {
     components: {
+        Upload,
         ImageLoader,
         Folder,
     },
@@ -430,6 +436,7 @@ export default {
         filterBy: '',
         filteredExtensions: [],
         showFilters: false,
+        dragCounter: 0,
     }),
     directives: {
         'drag-and-drop': DragAndDrop,
@@ -493,25 +500,28 @@ export default {
             let filemanagerContainer = document.querySelector('#filemanager-manager-container');
             filemanagerContainer.addEventListener('dragenter', e => {
                 e.preventDefault();
+                this.dragCounter++;
                 if (this.currentDraggedFile === null) {
                     this.uploadingFiles = true;
                     this.cssDragAndDrop = 'inside';
-                    let dropperContainer = document.querySelector('.drop-files');
-                    this.droppedListener(dropperContainer);
+                    this.droppedListener(filemanagerContainer);
                 }
             });
             filemanagerContainer.addEventListener('dragleave', e => {
-                e.preventDefault();
-                this.uploadingFiles = false;
-                this.cssDragAndDrop = 'outside';
+                this.dragCounter--;
+                if (this.dragCounter <= 0) {
+                    e.preventDefault();
+                    this.uploadingFiles = false;
+                    this.cssDragAndDrop = 'outside';
+                    this.currentDraggedFile = null;
+                }
             });
             filemanagerContainer.addEventListener('dragover', e => {
                 e.preventDefault();
                 if (this.currentDraggedFile === null) {
                     this.uploadingFiles = true;
                     this.cssDragAndDrop = 'inside';
-                    let dropperContainer = document.querySelector('.drop-files');
-                    this.droppedListener(dropperContainer);
+                    this.droppedListener(filemanagerContainer);
                 }
             });
         },
@@ -526,7 +536,11 @@ export default {
             this.cssDragAndDrop = 'drop';
             this.uploadingFiles = false;
             let files = await this.getFilesAsync(e.dataTransfer);
-            this.uploadFiles(files);
+            await this.uploadFiles(files);
+            this.uploadingFiles = false;
+            this.cssDragAndDrop = 'outside';
+            this.currentDraggedFile = null;
+            this.dragCounter = 0;
         },
         async getFilesAsync(dataTransfer) {
             const files = [];
@@ -602,15 +616,16 @@ export default {
         {
             this.uploadFiles({ files: Array.from(e.target.files) });
         },
-        uploadFiles(data) {
+        async uploadFiles(data) {
             let files = this.formatFiles(data.files || []);
             let folders = this.formatFiles(data.folders || []);
             if (files.length > 0) {
-                this.$emit('uploadFiles', files, 'files');
+                await this.$emit('uploadFiles', files, 'files');
             }
             if (folders.length > 0) {
-                this.$emit('uploadFiles', folders, 'folders', this.firstUploadFolder);
+                await this.$emit('uploadFiles', folders, 'folders', this.firstUploadFolder);
             }
+            this.uploadingFiles = false;
         },
         formatFiles(files) {
             let arrayFiles = [];
@@ -629,6 +644,7 @@ export default {
                     });
                 }
             });
+
             return arrayFiles;
         },
         getPreview(file) {
@@ -713,15 +729,11 @@ export default {
             }
         }
     },
-    updated () {
-        //
-    },
     mounted() {
         if (!this.eventsLoaded) {
             this.$nextTick(function () {
                 setTimeout(() => {
                     this.setDragAndDropEvents();
-                    // this.dragFilesEvents();
                     this.eventsLoaded = true;
                 }, 500);
             });
@@ -778,5 +790,12 @@ export default {
 }
 .border-dashed {
     border-style: dashed;
+}
+div.w-full:empty {
+    display: none;
+}
+/* Fix for weird bug where navigating to another Nova page removes scrolling on body */
+body.overflow-y-hidden:not(.overflow-hidden) {
+    overflow: unset;
 }
 </style>

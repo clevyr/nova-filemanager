@@ -15969,6 +15969,42 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
+/***/ "./node_modules/attr-accept/dist/es/index.js":
+/*!***************************************************!*\
+  !*** ./node_modules/attr-accept/dist/es/index.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports["default"] = function (file, acceptedFiles) {
+  if (file && acceptedFiles) {
+    var acceptedFilesArray = Array.isArray(acceptedFiles) ? acceptedFiles : acceptedFiles.split(',');
+    var fileName = file.name || '';
+    var mimeType = (file.type || '').toLowerCase();
+    var baseMimeType = mimeType.replace(/\/.*$/, '');
+    return acceptedFilesArray.some(function (type) {
+      var validType = type.trim().toLowerCase();
+
+      if (validType.charAt(0) === '.') {
+        return fileName.toLowerCase().endsWith(validType);
+      } else if (validType.endsWith('/*')) {
+        // This is something like a image/* mime type
+        return baseMimeType === validType.replace(/\/.*$/, '');
+      }
+
+      return mimeType === validType;
+    });
+  }
+
+  return true;
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/ConfirmationButton.vue?vue&type=script&lang=js":
 /*!************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/ConfirmationButton.vue?vue&type=script&lang=js ***!
@@ -16070,6 +16106,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_ImageLoader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../modules/ImageLoader */ "./resources/js/modules/ImageLoader.vue");
 /* harmony import */ var _modules_Folder__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../modules/Folder */ "./resources/js/modules/Folder.vue");
 /* harmony import */ var _tools_DragAndDrop__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tools/DragAndDrop */ "./resources/js/tools/DragAndDrop.js");
+/* harmony import */ var _Upload__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Upload */ "./resources/js/components/Upload.vue");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @inertiajs/inertia */ "../node_modules/@inertiajs/inertia/dist/index.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -16097,8 +16135,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
+    Upload: _Upload__WEBPACK_IMPORTED_MODULE_8__["default"],
     ImageLoader: _modules_ImageLoader__WEBPACK_IMPORTED_MODULE_5__["default"],
     Folder: _modules_Folder__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
@@ -16192,7 +16233,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       search: '',
       filterBy: '',
       filteredExtensions: [],
-      showFilters: false
+      showFilters: false,
+      dragCounter: 0
     };
   },
   directives: {
@@ -16266,19 +16308,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var filemanagerContainer = document.querySelector('#filemanager-manager-container');
       filemanagerContainer.addEventListener('dragenter', function (e) {
         e.preventDefault();
+        _this3.dragCounter++;
 
         if (_this3.currentDraggedFile === null) {
           _this3.uploadingFiles = true;
           _this3.cssDragAndDrop = 'inside';
-          var dropperContainer = document.querySelector('.drop-files');
 
-          _this3.droppedListener(dropperContainer);
+          _this3.droppedListener(filemanagerContainer);
         }
       });
       filemanagerContainer.addEventListener('dragleave', function (e) {
-        e.preventDefault();
-        _this3.uploadingFiles = false;
-        _this3.cssDragAndDrop = 'outside';
+        _this3.dragCounter--;
+
+        if (_this3.dragCounter <= 0) {
+          e.preventDefault();
+          _this3.uploadingFiles = false;
+          _this3.cssDragAndDrop = 'outside';
+          _this3.currentDraggedFile = null;
+        }
       });
       filemanagerContainer.addEventListener('dragover', function (e) {
         e.preventDefault();
@@ -16286,9 +16333,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         if (_this3.currentDraggedFile === null) {
           _this3.uploadingFiles = true;
           _this3.cssDragAndDrop = 'inside';
-          var dropperContainer = document.querySelector('.drop-files');
 
-          _this3.droppedListener(dropperContainer);
+          _this3.droppedListener(filemanagerContainer);
         }
       });
     },
@@ -16315,10 +16361,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
                 files = _context.sent;
+                _context.next = 8;
+                return _this4.uploadFiles(files);
 
-                _this4.uploadFiles(files);
+              case 8:
+                _this4.uploadingFiles = false;
+                _this4.cssDragAndDrop = 'outside';
+                _this4.currentDraggedFile = null;
+                _this4.dragCounter = 0;
 
-              case 7:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -16476,26 +16528,54 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     },
     uploadFiles: function uploadFiles(data) {
-      var files = this.formatFiles(data.files || []);
-      var folders = this.formatFiles(data.folders || []);
+      var _this6 = this;
 
-      if (files.length > 0) {
-        this.$emit('uploadFiles', files, 'files');
-      }
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var files, folders;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                files = _this6.formatFiles(data.files || []);
+                folders = _this6.formatFiles(data.folders || []);
 
-      if (folders.length > 0) {
-        this.$emit('uploadFiles', folders, 'folders', this.firstUploadFolder);
-      }
+                if (!(files.length > 0)) {
+                  _context3.next = 5;
+                  break;
+                }
+
+                _context3.next = 5;
+                return _this6.$emit('uploadFiles', files, 'files');
+
+              case 5:
+                if (!(folders.length > 0)) {
+                  _context3.next = 8;
+                  break;
+                }
+
+                _context3.next = 8;
+                return _this6.$emit('uploadFiles', folders, 'folders', _this6.firstUploadFolder);
+
+              case 8:
+                _this6.uploadingFiles = false;
+
+              case 9:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     },
     formatFiles: function formatFiles(files) {
-      var _this6 = this;
+      var _this7 = this;
 
       var arrayFiles = [];
       files.forEach(function (file) {
         if (file.name != '.DS_Store') {
           arrayFiles.push({
             id: md5__WEBPACK_IMPORTED_MODULE_3___default()(file.name),
-            preview: _this6.getPreview(file),
+            preview: _this7.getPreview(file),
             type: file.type,
             name: file.name,
             size: filesize__WEBPACK_IMPORTED_MODULE_2___default()(file.size),
@@ -16519,15 +16599,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return file.type.includes('image'); //returns true or false
     },
     moveFile: function moveFile(oldPath, newPath) {
-      var _this7 = this;
+      var _this8 = this;
 
       return _api__WEBPACK_IMPORTED_MODULE_4__["default"].moveFile(oldPath, newPath).then(function (result) {
         if (result.success == true) {
-          _this7.refresh();
+          _this8.refresh();
 
-          Nova.success(_this7.__('File moved successfully'));
+          Nova.success(_this8.__('File moved successfully'));
         } else {
-          Nova.error(_this7.__('Error opening the file. Check your permissions'));
+          Nova.error(_this8.__('Error opening the file. Check your permissions'));
         }
       })["catch"](function (error) {
         Nova.error(error.response.data.message);
@@ -16600,18 +16680,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     }
   },
-  updated: function updated() {//
-  },
   mounted: function mounted() {
     if (!this.eventsLoaded) {
       this.$nextTick(function () {
-        var _this8 = this;
+        var _this9 = this;
 
         setTimeout(function () {
-          _this8.setDragAndDropEvents(); // this.dragFilesEvents();
+          _this9.setDragAndDropEvents();
 
-
-          _this8.eventsLoaded = true;
+          _this9.eventsLoaded = true;
         }, 500);
       });
     }
@@ -16638,13 +16715,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     },
     filteredFiles: function filteredFiles() {
-      var _this9 = this;
+      var _this10 = this;
 
       var filtered = this.files;
 
       if (this.search) {
         filtered = this.files.filter(function (m) {
-          return m.name.toLowerCase().indexOf(_this9.search) > -1;
+          return m.name.toLowerCase().indexOf(_this10.search) > -1;
         });
       }
 
@@ -16654,7 +16731,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             return true;
           }
 
-          return lodash__WEBPACK_IMPORTED_MODULE_1___default().includes(_this9.filteredExtensions, file.ext.toLowerCase());
+          return lodash__WEBPACK_IMPORTED_MODULE_1___default().includes(_this10.filteredExtensions, file.ext.toLowerCase());
         });
       }
 
@@ -16676,57 +16753,95 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-// import vue2Dropzone from 'vue2-dropzone';
-// import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue3_dropzone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue3-dropzone */ "./node_modules/vue3-dropzone/dist/index.common.js");
+/* harmony import */ var _UploadProgress__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UploadProgress */ "./resources/js/components/UploadProgress.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_3__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
 var token = document.head.querySelector('meta[name="csrf-token"]');
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: {
-    options: {
-      type: Object,
-      "default": function _default() {
-        return {
-          message: 'hello'
-        };
-      },
-      required: false
-    },
-    current: {
-      type: String,
-      "default": '/',
-      required: true
+  components: {
+    UploadProgress: _UploadProgress__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  props: ['currentPath'],
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uploader = (0,vue__WEBPACK_IMPORTED_MODULE_3__.ref)(null);
+    var uploadIns = uploader;
+    (0,vue__WEBPACK_IMPORTED_MODULE_3__.onMounted)(function () {
+      uploadIns = uploader.value;
+    });
+
+    var saveFiles = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(files) {
+        var filesArr, x;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                filesArr = [];
+
+                for (x = 0; x < files.length; x++) {
+                  filesArr.push({
+                    file: files[x]
+                  });
+                }
+
+                _context.next = 4;
+                return uploadIns.startUploadingFiles(filesArr, 'files');
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function saveFiles(_x) {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+
+    function onDrop(acceptFiles, rejectReasons) {
+      saveFiles(acceptFiles); // saveFiles as callback
+
+      console.log(rejectReasons);
     }
-  },
-  components: {// vueDropzone: vue2Dropzone,
-  },
-  data: function data() {
-    return {
-      token: token.content,
-      dropzoneOptions: {
-        url: '/nova-vendor/Clevyr/nova-filemanager/uploads/add',
-        thumbnailWidth: 200,
-        addRemoveLinks: true,
-        dictDefaultMessage: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M13 5.41V17a1 1 0 0 1-2 0V5.41l-3.3 3.3a1 1 0 0 1-1.4-1.42l5-5a1 1 0 0 1 1.4 0l5 5a1 1 0 1 1-1.4 1.42L13 5.4zM3 17a1 1 0 0 1 2 0v3h14v-3a1 1 0 0 1 2 0v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3z"/></svg><br><br> Drag and Drop or Click',
-        headers: {
-          'X-CSRF-TOKEN': token.content
-        }
-      }
-    };
-  },
-  mounted: function mounted() {//
-  },
-  methods: {
-    sendingEvent: function sendingEvent(file, xhr, formData) {
-      formData.append('current', this.current);
-    },
-    vsuccess: function vsuccess(file, response) {
-      if (response.success == true) {
-        this.$refs.dropzone.removeFile(file);
-        Nova.success(this.__('File') + ' ' + response.name + ' ' + this.__('uploaded successfully'));
-        this.$emit('refresh', true);
-      } else {
-        Nova.error(this.__('Error uploading the file. Check your MaxFilesize or permissions'));
-      }
-    }
+
+    var _useDropzone = (0,vue3_dropzone__WEBPACK_IMPORTED_MODULE_1__.useDropzone)({
+      multiple: true,
+      onDrop: onDrop,
+      disabled: false
+    }),
+        getRootProps = _useDropzone.getRootProps,
+        getInputProps = _useDropzone.getInputProps,
+        isDragActive = _useDropzone.isDragActive,
+        rest = _useDropzone.rest;
+
+    return _objectSpread(_objectSpread({
+      getRootProps: getRootProps,
+      getInputProps: getInputProps,
+      isDragActive: isDragActive
+    }, props), {}, {
+      uploader: uploader
+    }, rest);
   }
 });
 
@@ -16791,7 +16906,6 @@ var token = document.head.querySelector('meta[name="csrf-token"]');
   },
   methods: {
     truncate: function truncate(text, stop, clamp) {
-      console.dir(text);
       return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '');
     },
     isImage: function isImage(file) {
@@ -18493,8 +18607,7 @@ var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 
 var _hoisted_21 = [_hoisted_20];
 var _hoisted_22 = {
-  key: 0,
-  "class": "p-2 overflow-y-auto flex flex-wrap relative",
+  "class": "p-2 overflow-y-auto flex flex-wrap relative min-h-40",
   style: {
     "height": "55vh"
   }
@@ -18505,40 +18618,54 @@ var _hoisted_23 = {
 };
 var _hoisted_24 = {
   key: 2,
-  "class": "w-full h-full flex flex-col items-center justify-center py-4"
+  "class": "w-full"
 };
 var _hoisted_25 = {
+  key: 0,
+  "class": "overflow-y-auto p-4 absolute top-0 left-0 h-full w-full min-h-40] z-[100]",
+  style: {
+    "background": "rgba(255,255,255,0.9)"
+  }
+};
+var _hoisted_26 = {
+  "class": "flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-700 border-dashed h-full"
+};
+var _hoisted_27 = {
+  key: 1,
+  "class": "w-full h-full flex flex-col items-center justify-center py-4"
+};
+var _hoisted_28 = {
   key: 1,
   "class": "p-2 w-full"
 };
-var _hoisted_26 = {
+var _hoisted_29 = {
   key: 0,
   "class": "w-full table-default"
 };
-var _hoisted_27 = {
+var _hoisted_30 = {
   key: 0,
   width: "30",
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 };
 
-var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   width: "50",
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_29 = {
+var _hoisted_32 = {
   "class": "p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 };
-var _hoisted_30 = {
+var _hoisted_33 = {
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 };
-var _hoisted_31 = {
+var _hoisted_34 = {
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 };
 
-var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "text-center p-2 whitespace-nowrap uppercase text-gray-500 text-xs tracking-wide"
 }, null, -1
 /* HOISTED */
@@ -18558,6 +18685,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Heading = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Heading");
 
   var _component_Loader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Loader");
+
+  var _component_Upload = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Upload");
 
   var _component_Folder = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Folder");
 
@@ -18741,7 +18870,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     );
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            v-if=\"uploadingFiles\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            class=\"overflow-y-auto p-4\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        >"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <div class=\"h-40 flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-700 border-dashed\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                <Heading level=\"1\" class=\"w-full text-center py-4\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    {{ __('Drop your files here!') }}"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                </Heading>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        </div>"), !_ctx.uploadingFiles ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [$props.files.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Heading, {
+  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [$props.files.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Heading, {
     key: 0,
     level: "3",
     "class": "w-full text-center py-4 px-2"
@@ -18754,7 +18883,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Loader)])) : !$props.files.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Heading, {
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Loader)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [_ctx.uploadingFiles ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Upload, {
+    currentPath: $props.current,
+    onRefreshFiles: _cache[12] || (_cache[12] = function ($event) {
+      return _ctx.$emit('refresh');
+    })
+  }, null, 8
+  /* PROPS */
+  , ["currentPath"])])])) : !$props.files.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Heading, {
     level: "3",
     "class": "w-full text-center mb-4"
   }, {
@@ -18780,7 +18916,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.files.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  , ["onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])), !$props.files.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 3
   }, [_ctx.view == 'grid' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 0
@@ -18817,7 +18953,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
         'loading': _ctx.loadingInfo
       }),
-      onMissing: _cache[12] || (_cache[12] = function (value) {
+      onMissing: _cache[13] || (_cache[13] = function (value) {
         return _ctx.missing = value;
       }),
       onShowInfo: $options.showInfo,
@@ -18853,13 +18989,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* KEYED_FRAGMENT */
   ))], 64
   /* STABLE_FRAGMENT */
-  )) : _ctx.view == 'list' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [$props.files.length > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("table", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [$props.multiSelecting ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_27)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Name')), 1
+  )) : _ctx.view == 'list' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [$props.files.length > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("table", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [$props.multiSelecting ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_30)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Name')), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Size')), 1
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Size')), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Last Modification')), 1
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Last Modification')), 1
   /* TEXT */
-  ), _hoisted_32])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [$props.parent.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Folder, {
+  ), _hoisted_35])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [$props.parent.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Folder, {
     ref: 'folder_' + $props.parent.id,
     key: $props.parent.id,
     "data-key": $props.parent.id,
@@ -18907,7 +19043,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
         'loading': _ctx.loadingInfo
       }),
-      onMissing: _cache[13] || (_cache[13] = function (value) {
+      onMissing: _cache[14] || (_cache[14] = function (value) {
         return _ctx.missing = value;
       }),
       onShowInfo: $options.showInfo,
@@ -18923,7 +19059,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* UNKEYED_FRAGMENT */
   ))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 512
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 512
   /* NEED_PATCH */
   );
 }
@@ -18944,16 +19080,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
-
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "card relative"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <vue-dropzone"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                ref=\"dropzone\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                :id=\"'upload'\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                :options=\"dropzoneOptions\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                @vdropzone-success=\"vsuccess\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                @vdropzone-sending=\"sendingEvent\""), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            />")], -1
-/* HOISTED */
-);
-
-var _hoisted_2 = [_hoisted_1];
+var _hoisted_1 = {
+  "class": "w-full h-full",
+  style: {
+    "pointer-events": "none"
+  }
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_2);
+  var _component_Heading = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Heading");
+
+  var _component_UploadProgress = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("UploadProgress");
+
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)($setup.getRootProps(), {
+    "class": "relative h-full w-full py-12 w-full text-center flex flex-col justify-center"
+  }), [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Heading, {
+    level: 1
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__('Drop your files here!')), 1
+      /* TEXT */
+      )];
+    }),
+    _: 1
+    /* STABLE */
+
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeProps)((0,vue__WEBPACK_IMPORTED_MODULE_0__.guardReactiveProps)($setup.getInputProps())), null, 16
+  /* FULL_PROPS */
+  )], 16
+  /* FULL_PROPS */
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_UploadProgress, {
+    ref: "uploader",
+    current: $props.currentPath,
+    onRemoveFile: _cache[0] || (_cache[0] = function ($event) {
+      return _ctx.$emit('refreshFiles');
+    })
+  }, null, 8
+  /* PROPS */
+  , ["current"])]);
 }
 
 /***/ }),
@@ -22507,7 +22670,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n@media(min-width:768px) {\n.md\\:w-1\\/6 {\n        width: 16.6666666667%;\n}\n}\n.h-40 {\n    height: 10rem;\n}\n.border-dashed {\n    border-style: dashed;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n@media(min-width:768px) {\n.md\\:w-1\\/6 {\n        width: 16.6666666667%;\n}\n}\n.h-40 {\n    height: 10rem;\n}\n.border-dashed {\n    border-style: dashed;\n}\ndiv.w-full:empty {\n    display: none;\n}\n/* Fix for weird bug where navigating to another Nova page removes scrolling on body */\nbody.overflow-y-hidden:not(.overflow-hidden) {\n    overflow: unset;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -22779,6 +22942,277 @@ module.exports = function (cssWithMappingToString) {
 
   return list;
 };
+
+/***/ }),
+
+/***/ "./node_modules/file-selector/dist/es5/file-selector.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/file-selector/dist/es5/file-selector.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "fromEvent": () => (/* binding */ fromEvent)
+/* harmony export */ });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _file__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./file */ "./node_modules/file-selector/dist/es5/file.js");
+
+
+var FILES_TO_IGNORE = [
+    // Thumbnail cache files for macOS and Windows
+    '.DS_Store',
+    'Thumbs.db' // Windows
+];
+/**
+ * Convert a DragEvent's DataTrasfer object to a list of File objects
+ * NOTE: If some of the items are folders,
+ * everything will be flattened and placed in the same list but the paths will be kept as a {path} property.
+ * @param evt
+ */
+function fromEvent(evt) {
+    return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__awaiter)(this, void 0, void 0, function () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__generator)(this, function (_a) {
+            return [2 /*return*/, isDragEvt(evt) && evt.dataTransfer
+                    ? getDataTransferFiles(evt.dataTransfer, evt.type)
+                    : getInputFiles(evt)];
+        });
+    });
+}
+function isDragEvt(value) {
+    return !!value.dataTransfer;
+}
+function getInputFiles(evt) {
+    var files = isInput(evt.target)
+        ? evt.target.files
+            ? fromList(evt.target.files)
+            : []
+        : [];
+    return files.map(function (file) { return (0,_file__WEBPACK_IMPORTED_MODULE_0__.toFileWithPath)(file); });
+}
+function isInput(value) {
+    return value !== null;
+}
+function getDataTransferFiles(dt, type) {
+    return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__awaiter)(this, void 0, void 0, function () {
+        var items, files;
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__generator)(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!dt.items) return [3 /*break*/, 2];
+                    items = fromList(dt.items)
+                        .filter(function (item) { return item.kind === 'file'; });
+                    // According to https://html.spec.whatwg.org/multipage/dnd.html#dndevents,
+                    // only 'dragstart' and 'drop' has access to the data (source node)
+                    if (type !== 'drop') {
+                        return [2 /*return*/, items];
+                    }
+                    return [4 /*yield*/, Promise.all(items.map(toFilePromises))];
+                case 1:
+                    files = _a.sent();
+                    return [2 /*return*/, noIgnoredFiles(flatten(files))];
+                case 2: return [2 /*return*/, noIgnoredFiles(fromList(dt.files)
+                        .map(function (file) { return (0,_file__WEBPACK_IMPORTED_MODULE_0__.toFileWithPath)(file); }))];
+            }
+        });
+    });
+}
+function noIgnoredFiles(files) {
+    return files.filter(function (file) { return FILES_TO_IGNORE.indexOf(file.name) === -1; });
+}
+// IE11 does not support Array.from()
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from#Browser_compatibility
+// https://developer.mozilla.org/en-US/docs/Web/API/FileList
+// https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItemList
+function fromList(items) {
+    var files = [];
+    // tslint:disable: prefer-for-of
+    for (var i = 0; i < items.length; i++) {
+        var file = items[i];
+        files.push(file);
+    }
+    return files;
+}
+// https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem
+function toFilePromises(item) {
+    if (typeof item.webkitGetAsEntry !== 'function') {
+        return fromDataTransferItem(item);
+    }
+    var entry = item.webkitGetAsEntry();
+    // Safari supports dropping an image node from a different window and can be retrieved using
+    // the DataTransferItem.getAsFile() API
+    // NOTE: FileSystemEntry.file() throws if trying to get the file
+    if (entry && entry.isDirectory) {
+        return fromDirEntry(entry);
+    }
+    return fromDataTransferItem(item);
+}
+function flatten(items) {
+    return items.reduce(function (acc, files) { return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__spread)(acc, (Array.isArray(files) ? flatten(files) : [files])); }, []);
+}
+function fromDataTransferItem(item) {
+    var file = item.getAsFile();
+    if (!file) {
+        return Promise.reject(item + " is not a File");
+    }
+    var fwp = (0,_file__WEBPACK_IMPORTED_MODULE_0__.toFileWithPath)(file);
+    return Promise.resolve(fwp);
+}
+// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemEntry
+function fromEntry(entry) {
+    return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__awaiter)(this, void 0, void 0, function () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__generator)(this, function (_a) {
+            return [2 /*return*/, entry.isDirectory ? fromDirEntry(entry) : fromFileEntry(entry)];
+        });
+    });
+}
+// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry
+function fromDirEntry(entry) {
+    var reader = entry.createReader();
+    return new Promise(function (resolve, reject) {
+        var entries = [];
+        function readEntries() {
+            var _this = this;
+            // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry/createReader
+            // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryReader/readEntries
+            reader.readEntries(function (batch) { return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__awaiter)(_this, void 0, void 0, function () {
+                var files, err_1, items;
+                return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__generator)(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!!batch.length) return [3 /*break*/, 5];
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            return [4 /*yield*/, Promise.all(entries)];
+                        case 2:
+                            files = _a.sent();
+                            resolve(files);
+                            return [3 /*break*/, 4];
+                        case 3:
+                            err_1 = _a.sent();
+                            reject(err_1);
+                            return [3 /*break*/, 4];
+                        case 4: return [3 /*break*/, 6];
+                        case 5:
+                            items = Promise.all(batch.map(fromEntry));
+                            entries.push(items);
+                            // Continue reading
+                            readEntries();
+                            _a.label = 6;
+                        case 6: return [2 /*return*/];
+                    }
+                });
+            }); }, function (err) {
+                reject(err);
+            });
+        }
+        readEntries();
+    });
+}
+// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileEntry
+function fromFileEntry(entry) {
+    return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__awaiter)(this, void 0, void 0, function () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__generator)(this, function (_a) {
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    entry.file(function (file) {
+                        var fwp = (0,_file__WEBPACK_IMPORTED_MODULE_0__.toFileWithPath)(file, entry.fullPath);
+                        resolve(fwp);
+                    }, function (err) {
+                        reject(err);
+                    });
+                })];
+        });
+    });
+}
+//# sourceMappingURL=file-selector.js.map
+
+/***/ }),
+
+/***/ "./node_modules/file-selector/dist/es5/file.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/file-selector/dist/es5/file.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "COMMON_MIME_TYPES": () => (/* binding */ COMMON_MIME_TYPES),
+/* harmony export */   "toFileWithPath": () => (/* binding */ toFileWithPath)
+/* harmony export */ });
+var COMMON_MIME_TYPES = new Map([
+    ['avi', 'video/avi'],
+    ['gif', 'image/gif'],
+    ['ico', 'image/x-icon'],
+    ['jpeg', 'image/jpeg'],
+    ['jpg', 'image/jpeg'],
+    ['mkv', 'video/x-matroska'],
+    ['mov', 'video/quicktime'],
+    ['mp4', 'video/mp4'],
+    ['pdf', 'application/pdf'],
+    ['png', 'image/png'],
+    ['zip', 'application/zip'],
+    ['doc', 'application/msword'],
+    ['docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+]);
+function toFileWithPath(file, path) {
+    var f = withMimeType(file);
+    if (typeof f.path !== 'string') { // on electron, path is already set to the absolute path
+        var webkitRelativePath = file.webkitRelativePath;
+        Object.defineProperty(f, 'path', {
+            value: typeof path === 'string'
+                ? path
+                // If <input webkitdirectory> is set,
+                // the File will have a {webkitRelativePath} property
+                // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/webkitdirectory
+                : typeof webkitRelativePath === 'string' && webkitRelativePath.length > 0
+                    ? webkitRelativePath
+                    : file.name,
+            writable: false,
+            configurable: false,
+            enumerable: true
+        });
+    }
+    return f;
+}
+function withMimeType(file) {
+    var name = file.name;
+    var hasExtension = name && name.lastIndexOf('.') !== -1;
+    if (hasExtension && !file.type) {
+        var ext = name.split('.')
+            .pop().toLowerCase();
+        var type = COMMON_MIME_TYPES.get(ext);
+        if (type) {
+            Object.defineProperty(file, 'type', {
+                value: type,
+                writable: false,
+                configurable: false,
+                enumerable: true
+            });
+        }
+    }
+    return file;
+}
+//# sourceMappingURL=file.js.map
+
+/***/ }),
+
+/***/ "./node_modules/file-selector/dist/es5/index.js":
+/*!******************************************************!*\
+  !*** ./node_modules/file-selector/dist/es5/index.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "fromEvent": () => (/* reexport safe */ _file_selector__WEBPACK_IMPORTED_MODULE_0__.fromEvent)
+/* harmony export */ });
+/* harmony import */ var _file_selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./file-selector */ "./node_modules/file-selector/dist/es5/file-selector.js");
+
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -46165,6 +46599,293 @@ module.exports = function (list, options) {
 
 /***/ }),
 
+/***/ "./node_modules/tslib/tslib.es6.js":
+/*!*****************************************!*\
+  !*** ./node_modules/tslib/tslib.es6.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__assign": () => (/* binding */ __assign),
+/* harmony export */   "__asyncDelegator": () => (/* binding */ __asyncDelegator),
+/* harmony export */   "__asyncGenerator": () => (/* binding */ __asyncGenerator),
+/* harmony export */   "__asyncValues": () => (/* binding */ __asyncValues),
+/* harmony export */   "__await": () => (/* binding */ __await),
+/* harmony export */   "__awaiter": () => (/* binding */ __awaiter),
+/* harmony export */   "__classPrivateFieldGet": () => (/* binding */ __classPrivateFieldGet),
+/* harmony export */   "__classPrivateFieldIn": () => (/* binding */ __classPrivateFieldIn),
+/* harmony export */   "__classPrivateFieldSet": () => (/* binding */ __classPrivateFieldSet),
+/* harmony export */   "__createBinding": () => (/* binding */ __createBinding),
+/* harmony export */   "__decorate": () => (/* binding */ __decorate),
+/* harmony export */   "__exportStar": () => (/* binding */ __exportStar),
+/* harmony export */   "__extends": () => (/* binding */ __extends),
+/* harmony export */   "__generator": () => (/* binding */ __generator),
+/* harmony export */   "__importDefault": () => (/* binding */ __importDefault),
+/* harmony export */   "__importStar": () => (/* binding */ __importStar),
+/* harmony export */   "__makeTemplateObject": () => (/* binding */ __makeTemplateObject),
+/* harmony export */   "__metadata": () => (/* binding */ __metadata),
+/* harmony export */   "__param": () => (/* binding */ __param),
+/* harmony export */   "__read": () => (/* binding */ __read),
+/* harmony export */   "__rest": () => (/* binding */ __rest),
+/* harmony export */   "__spread": () => (/* binding */ __spread),
+/* harmony export */   "__spreadArray": () => (/* binding */ __spreadArray),
+/* harmony export */   "__spreadArrays": () => (/* binding */ __spreadArrays),
+/* harmony export */   "__values": () => (/* binding */ __values)
+/* harmony export */ });
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+var __createBinding = Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+});
+
+function __exportStar(m, o) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+/** @deprecated */
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+/** @deprecated */
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+var __setModuleDefault = Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+}
+
+function __classPrivateFieldIn(state, receiver) {
+    if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
+    return typeof state === "function" ? receiver === state : state.has(receiver);
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/urijs/src/IPv6.js":
 /*!****************************************!*\
   !*** ./node_modules/urijs/src/IPv6.js ***!
@@ -50763,6 +51484,18 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_8_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_8_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Progress_vue_vue_type_style_index_0_id_30912c5a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-8.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Progress.vue?vue&type=style&index=0&id=30912c5a&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/modules/Progress.vue?vue&type=style&index=0&id=30912c5a&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue3-dropzone/dist/index.common.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/vue3-dropzone/dist/index.common.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", ({value:!0}));var e=__webpack_require__(/*! vue */ "vue"),n=__webpack_require__(/*! file-selector */ "./node_modules/file-selector/dist/es5/index.js");function t(e){return e&&"object"==typeof e&&"default"in e?e:{default:e}}var r=t(__webpack_require__(/*! attr-accept */ "./node_modules/attr-accept/dist/es/index.js")),o=function(){return(o=Object.assign||function(e){for(var n,t=1,r=arguments.length;t<r;t++)for(var o in n=arguments[t])Object.prototype.hasOwnProperty.call(n,o)&&(e[o]=n[o]);return e}).apply(this,arguments)};function i(e,n){var t={};for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&n.indexOf(r)<0&&(t[r]=e[r]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var o=0;for(r=Object.getOwnPropertySymbols(e);o<r.length;o++)n.indexOf(r[o])<0&&Object.prototype.propertyIsEnumerable.call(e,r[o])&&(t[r[o]]=e[r[o]])}return t}function a(e,n,t,r){return new(t||(t=Promise))((function(o,i){function a(e){try{l(r.next(e))}catch(e){i(e)}}function u(e){try{l(r.throw(e))}catch(e){i(e)}}function l(e){var n;e.done?o(e.value):(n=e.value,n instanceof t?n:new t((function(e){e(n)}))).then(a,u)}l((r=r.apply(e,n||[])).next())}))}function u(e,n){var t,r,o,i,a={label:0,sent:function(){if(1&o[0])throw o[1];return o[1]},trys:[],ops:[]};return i={next:u(0),throw:u(1),return:u(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function u(i){return function(u){return function(i){if(t)throw new TypeError("Generator is already executing.");for(;a;)try{if(t=1,r&&(o=2&i[0]?r.return:i[0]?r.throw||((o=r.return)&&o.call(r),0):r.next)&&!(o=o.call(r,i[1])).done)return o;switch(r=0,o&&(i=[2&i[0],o.value]),i[0]){case 0:case 1:o=i;break;case 4:return a.label++,{value:i[1],done:!1};case 5:a.label++,r=i[1],i=[0];continue;case 7:i=a.ops.pop(),a.trys.pop();continue;default:if(!(o=a.trys,(o=o.length>0&&o[o.length-1])||6!==i[0]&&2!==i[0])){a=0;continue}if(3===i[0]&&(!o||i[1]>o[0]&&i[1]<o[3])){a.label=i[1];break}if(6===i[0]&&a.label<o[1]){a.label=o[1],o=i;break}if(o&&a.label<o[2]){a.label=o[2],a.ops.push(i);break}o[2]&&a.ops.pop(),a.trys.pop();continue}i=n.call(e,a)}catch(e){i=[6,e],r=0}finally{t=o=0}if(5&i[0])throw i[1];return{value:i[0]?i[1]:void 0,done:!0}}([i,u])}}}function l(e,n){for(var t=0,r=n.length,o=e.length;t<r;t++,o++)e[o]=n[t];return e}function c(e){e.preventDefault()}function s(e){return e.dataTransfer?Array.prototype.some.call(e.dataTransfer.types,(function(e){return"Files"===e||"application/x-moz-file"===e})):!!e.target&&!!e.target.files}function f(e){return"function"==typeof e.isPropagationStopped?e.isPropagationStopped():void 0!==e.cancelBubble&&e.cancelBubble}var v={code:"too-many-files",message:"Too many files"},p=function(e){return e=Array.isArray(e)&&1===e.length?e[0]:e,{code:"file-invalid-type",message:"File type must be "+(Array.isArray(e)?"one of "+e.join(", "):e)}};function g(e){return null!=e}function d(e,n){var t="application/x-moz-file"===e.type||r.default(e,n);return[t,t?null:p(n)]}var D=function(e){return{code:"file-too-large",message:"File is larger than "+e+" bytes"}},y=function(e){return{code:"file-too-small",message:"File is smaller than "+e+" bytes"}};function m(e,n,t){if(g(e.size)&&e.size)if(g(n)&&g(t)){if(e.size>t)return[!1,D(t)];if(e.size<n)return[!1,y(n)]}else{if(g(n)&&e.size<n)return[!1,y(n)];if(g(t)&&e.size>t)return[!1,D(t)]}return[!0,null]}function b(){for(var e=[],n=0;n<arguments.length;n++)e[n]=arguments[n];return function(n){for(var t=[],r=1;r<arguments.length;r++)t[r-1]=arguments[r];return e.some((function(e){return!f(n)&&e&&e.apply(void 0,l([n],t)),f(n)}))}}var h={disabled:!1,getFilesFromEvent:n.fromEvent,maxSize:1/0,minSize:0,multiple:!0,maxFiles:0,preventDropOnDocument:!0,noClick:!1,noKeyboard:!1,noDrag:!1,noDragEventsBubbling:!1};function F(e,n){switch(n.type){case"focus":return o(o({},e),{isFocused:!0});case"blur":return o(o({},e),{isFocused:!1});case"openDialog":return o(o({},e),{isFileDialogActive:!0});case"closeDialog":return o(o({},e),{isFileDialogActive:!1});case"setDraggedFiles":var t=n.isDragActive,r=n.draggedFiles;return o(o({},e),{draggedFiles:r,isDragActive:t});case"setFiles":return o(o({},e),{acceptedFiles:n.acceptedFiles,fileRejections:n.fileRejections});case"reset":return o(o({},e),{isFileDialogActive:!1,isDragActive:!1,draggedFiles:[],acceptedFiles:[],fileRejections:[]});default:return e}}exports.useDropzone=function(n){void 0===n&&(n={});var t=e.ref(o(o({},h),n));e.watch((function(){return o({},n)}),(function(e){t.value=o(o({},t.value),e)}));var r=e.ref(),p=e.ref(),g=function(n,t,r){var o=e.reactive(t),i=function(t){var r=n(e.toRaw(o),t);Object.keys(r).forEach((function(e){o[e]=r[e]}))};return null!=r&&i(r),[o,i]}(F,{isFocused:!1,isFileDialogActive:!1,isDragActive:!1,isDragAccept:!1,isDragReject:!1,draggedFiles:[],acceptedFiles:[],fileRejections:[]}),D=g[0],y=g[1],w=function(){p.value&&(y({type:"openDialog"}),p.value.value="",p.value.click())},E=function(){var e=t.value.onFileDialogCancel;D.isFileDialogActive&&setTimeout((function(){if(p.value){var n=p.value.files;n&&!n.length&&(y({type:"closeDialog"}),"function"==typeof e&&e())}}),300)};function x(e){r.value&&((r.value.$el||r.value).isEqualNode(e.target)&&(32!==e.keyCode&&13!==e.keyCode||(e.preventDefault(),w())))}function O(){y({type:"focus"})}function A(){y({type:"blur"})}function z(){var e;t.value.noClick||(void 0===e&&(e=window.navigator.userAgent),function(e){return e.includes("MSIE")||e.includes("Trident/")}(e)||function(e){return e.includes("Edge/")}(e)?setTimeout(w,0):w())}var j=e.ref([]),S=function(e){r.value&&((r.value.$el||r.value).contains(e.target)||(e.preventDefault(),j.value=[]))};function k(e){t.value.noDragEventsBubbling&&e.stopPropagation()}function C(e){return a(this,void 0,void 0,(function(){var n,r,o,i,a;return u(this,(function(u){switch(u.label){case 0:return n=t.value,r=n.getFilesFromEvent,o=n.noDragEventsBubbling,i=n.onDragEnter,e.preventDefault(),k(e),j.value=l(l([],j.value),[e.target]),s(e)?r?[4,r(e)]:[2]:[3,2];case 1:if((a=u.sent())||(a=[]),f(e)&&!o)return[2];y({draggedFiles:a,isDragActive:!0,type:"setDraggedFiles"}),i&&i(e),u.label=2;case 2:return[2]}}))}))}function P(e){var n=t.value.onDragOver;if(e.preventDefault(),k(e),e.dataTransfer)try{e.dataTransfer.dropEffect="copy"}catch(e){}return s(e)&&n&&n(e),!1}function R(e){e.preventDefault(),k(e);var n=j.value.filter((function(e){return!!r.value&&(r.value.$el||r.value).contains(e)})),o=n.indexOf(e.target);if(-1!==o&&n.splice(o,1),j.value=n,!(n.length>0)){y({isDragActive:!1,type:"setDraggedFiles",draggedFiles:[]});var i=t.value.onDragLeave;s(e)&&i&&i(e)}}function B(e){e.preventDefault(),k(e),j.value=[];var n=t.value,r=n.getFilesFromEvent,o=n.noDragEventsBubbling,i=n.accept,a=n.minSize,u=n.maxSize,l=n.multiple,c=n.maxFiles,p=n.onDrop,g=n.onDropRejected,D=n.onDropAccepted;if(s(e)){if(!r)return;Promise.resolve(r(e)).then((function(n){if(!f(e)||o){var t=[],r=[];n.forEach((function(e){var n=d(e,i),o=n[0],l=n[1],c=m(e,a,u),s=c[0],f=c[1];if(o&&s)t.push(e);else{var v=[l,f].filter((function(e){return e}));r.push({file:e,errors:v})}})),(!l&&t.length>1||l&&c>=1&&t.length>c)&&(t.forEach((function(e){r.push({file:e,errors:[v]})})),t.splice(0)),y({acceptedFiles:t,fileRejections:r,type:"setFiles"}),p&&p(t,r,e),r.length>0&&g&&g(r,e),t.length>0&&D&&D(t,e)}}))}y({type:"reset"})}e.onMounted((function(){window.addEventListener("focus",E,!1),t.value.preventDropOnDocument&&(document.addEventListener("dragover",c,!1),document.addEventListener("drop",S,!1))})),e.onUnmounted((function(){window.removeEventListener("focus",E,!1),t.value.preventDropOnDocument&&(document.removeEventListener("dragover",c),document.removeEventListener("drop",S))}));var L=function(e){return t.value.disabled?null:e},T=function(e){return t.value.noKeyboard?null:L(e)},K=function(e){return t.value.noDrag?null:L(e)},I=function(e){e.stopPropagation()},q=e.computed((function(){return D.draggedFiles?D.draggedFiles.length:0})),M=e.computed((function(){return q.value>0&&function(e){var n=e.files,t=e.accept,r=e.minSize,o=e.maxSize,i=e.multiple,a=e.maxFiles;return!(!i&&n.length>1||i&&a>=1&&n.length>a)&&n.every((function(e){var n=d(e,t)[0],i=m(e,r,o)[0];return n&&i}))}({files:D.draggedFiles,accept:t.value.accept,minSize:t.value.minSize,maxSize:t.value.maxSize,multiple:t.value.multiple,maxFiles:t.value.maxFiles})})),$=e.computed((function(){return q.value>0&&!M.value}));return o(o({},e.toRefs(D)),{isDragAccept:M,isDragReject:$,isFocused:e.computed((function(){return D.isFocused&&!t.value.disabled})),getRootProps:function(e){void 0===e&&(e={});var n=e.onKeyDown,a=e.onFocus,u=e.onBlur,l=e.onClick,c=e.onDragEnter,s=e.onDragenter,f=e.onDragOver,v=e.onDragover,p=e.onDragLeave,g=e.onDragleave,d=e.onDrop,D=i(e,["onKeyDown","onFocus","onBlur","onClick","onDragEnter","onDragenter","onDragOver","onDragover","onDragLeave","onDragleave","onDrop"]);return o(o({onKeyDown:T(b(n,x)),onFocus:T(b(a,O)),onBlur:T(b(u,A)),onClick:L(b(l,z)),onDragenter:K(b(c,s,C)),onDragover:K(b(f,v,P)),onDragleave:K(b(p,g,R)),onDrop:K(b(d,B)),ref:r},t.value.disabled||t.value.noKeyboard?{}:{tabIndex:0}),D)},getInputProps:function(e){void 0===e&&(e={});var n=e.onChange,r=e.onClick,a=i(e,["onChange","onClick"]),u={accept:t.value.accept,multiple:t.value.multiple,style:"display: none",type:"file",onChange:L(b(n,B)),onClick:L(b(r,I)),autoComplete:"off",tabIndex:-1,ref:p};return o(o({},u),a)},rootRef:r,inputRef:p,open:L(w)})};
 
 
 /***/ }),
