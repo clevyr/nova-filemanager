@@ -16107,7 +16107,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_Folder__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../modules/Folder */ "./resources/js/modules/Folder.vue");
 /* harmony import */ var _tools_DragAndDrop__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tools/DragAndDrop */ "./resources/js/tools/DragAndDrop.js");
 /* harmony import */ var _Upload__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Upload */ "./resources/js/components/Upload.vue");
-/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @inertiajs/inertia */ "../node_modules/@inertiajs/inertia/dist/index.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -16127,7 +16126,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 
 
 
@@ -18505,11 +18503,11 @@ var _hoisted_2 = {
 
 var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
+  "class": "fill-current",
   viewBox: "0 0 24 24",
   width: "24",
   height: "24"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
-  "class": "heroicon-ui",
   d: "M6 18.7V21a1 1 0 0 1-2 0v-5a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2H7.1A7 7 0 0 0 19 12a1 1 0 1 1 2 0 9 9 0 0 1-15 6.7zM18 5.3V3a1 1 0 0 1 2 0v5a1 1 0 0 1-1 1h-5a1 1 0 0 1 0-2h2.9A7 7 0 0 0 5 12a1 1 0 1 1-2 0 9 9 0 0 1 15-6.7z"
 })], -1
 /* HOISTED */
@@ -18525,11 +18523,11 @@ var _hoisted_5 = {
 
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
+  "class": "fill-current",
   viewBox: "0 0 24 24",
   width: "24",
   height: "24"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
-  "class": "heroicon-ui",
   d: "M5 3h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5h-4zM5 13h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4h-4z"
 })], -1
 /* HOISTED */
@@ -18537,6 +18535,7 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 
 var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
+  "class": "fill-current",
   viewBox: "0 0 20 20",
   width: "20",
   height: "20"
@@ -18622,13 +18621,10 @@ var _hoisted_24 = {
 };
 var _hoisted_25 = {
   key: 0,
-  "class": "overflow-y-auto p-4 absolute top-0 left-0 h-full w-full min-h-40] z-[100]",
-  style: {
-    "background": "rgba(255,255,255,0.9)"
-  }
+  "class": "overflow-y-auto p-4 absolute top-0 left-0 h-full w-full min-h-40] z-[100]"
 };
 var _hoisted_26 = {
-  "class": "flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-700 border-dashed h-full"
+  "class": "bg-white dark:bg-gray-800 dark:color-white flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-900 border-dashed h-full"
 };
 var _hoisted_27 = {
   key: 1,

@@ -10,9 +10,8 @@
                 class="mr-2"
                 :class="{ rotate: loading }"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path class="heroicon-ui"
-                          d="M6 18.7V21a1 1 0 0 1-2 0v-5a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2H7.1A7 7 0 0 0 19 12a1 1 0 1 1 2 0 9 9 0 0 1-15 6.7zM18 5.3V3a1 1 0 0 1 2 0v5a1 1 0 0 1-1 1h-5a1 1 0 0 1 0-2h2.9A7 7 0 0 0 5 12a1 1 0 1 1-2 0 9 9 0 0 1 15-6.7z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M6 18.7V21a1 1 0 0 1-2 0v-5a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2H7.1A7 7 0 0 0 19 12a1 1 0 1 1 2 0 9 9 0 0 1-15 6.7zM18 5.3V3a1 1 0 0 1 2 0v5a1 1 0 0 1-1 1h-5a1 1 0 0 1 0-2h2.9A7 7 0 0 0 5 12a1 1 0 1 1-2 0 9 9 0 0 1 15-6.7z" />
                 </svg>
             </OutlineButton>
 
@@ -45,9 +44,8 @@
                 @click="viewAs('grid')"
                 class="mr-2"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path class="heroicon-ui"
-                          d="M5 3h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5h-4zM5 13h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4h-4z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current"  viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M5 3h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5h-4zM5 13h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4h-4z" />
                 </svg>
             </OutlineButton>
 
@@ -56,9 +54,8 @@
                 @click="viewAs('list')"
                 class="mr-2"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20">
-                    <path
-                        d="M1 4h2v2H1V4zm4 0h14v2H5V4zM1 9h2v2H1V9zm4 0h14v2H5V9zm-4 5h2v2H1v-2zm4 0h14v2H5v-2z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current"  viewBox="0 0 20 20" width="20" height="20">
+                    <path d="M1 4h2v2H1V4zm4 0h14v2H5V4zM1 9h2v2H1V9zm4 0h14v2H5V9zm-4 5h2v2H1v-2zm4 0h14v2H5v-2z" />
                 </svg>
             </OutlineButton>
 
@@ -166,10 +163,12 @@
                 <div
                     v-if="uploadingFiles"
                     class="overflow-y-auto p-4 absolute top-0 left-0 h-full w-full min-h-40] z-[100]"
-                    style="background: rgba(255,255,255,0.9)"
                 >
                     <div
-                        class="flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-700 border-dashed h-full">
+                        class="
+                            bg-white dark:bg-gray-800 dark:color-white
+                            flex flex-wrap items-center rounded-lg border-2 border-gray-200 dark:border-gray-900 border-dashed h-full
+                        ">
                         <Upload :currentPath="current" @refreshFiles="$emit('refresh')" />
                     </div>
                 </div>
@@ -348,7 +347,6 @@ import ImageLoader from '../modules/ImageLoader';
 import Folder from '../modules/Folder';
 import { DragAndDrop } from '../tools/DragAndDrop';
 import Upload from "./Upload";
-import { Inertia } from '@inertiajs/inertia'
 
 export default {
     components: {

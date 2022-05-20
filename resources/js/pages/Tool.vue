@@ -1,5 +1,7 @@
 <template>
     <div ref="filemanager-container">
+        <HTMLHead title="Filemanager" />
+
         <Heading class="mb-6">
             {{ __('Filemanager') }}
         </Heading>
@@ -75,9 +77,9 @@
     import ConfirmMultiDeleteModal from '../modals/ConfirmMultiDeleteModal';
     import RenameModal from '../modals/RenameModal';
     import DetailModal from '../modals/DetailModal';
-
     import UploadProgress from '../components/UploadProgress';
     import Manager from '../components/Manager';
+    import { Head as HTMLHead } from '@inertiajs/inertia-vue3'
 
     export default {
         components: {
@@ -86,7 +88,7 @@
             ConfirmDeleteModal,
             ConfirmMultiDeleteModal,
             DetailModal,
-
+            HTMLHead,
             Manager: Manager,
             UploadProgress: UploadProgress,
         },
