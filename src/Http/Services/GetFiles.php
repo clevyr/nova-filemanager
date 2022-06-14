@@ -28,11 +28,18 @@ trait GetFiles
 
         foreach ($storageContents as $file) {
             $mime = null;
-            try {
-                $mime = $this->storage->mimeType($file->path());
-            } catch (\Exception $e) {
-                $mime = null;
+
+            if ($file->type() !== 'dir') {
+                $mime = $file->mimeType() ?? null;
+                if (!$mime) {
+                    try {
+                        $mime = $this->storage->mimeType($file->path());
+                    } catch (\Exception $e) {
+                        $mime = null;
+                    }
+                }
             }
+
             $returnArray[] = [
                 'type' => $file->type(),
                 'basename' => basename($file->path()),
@@ -511,7 +518,7 @@ trait GetFiles
 
     /**
      * Hide folders with .hide file.
-     * @param $oath
+     * @param $path
      */
     private function checkShouldHideFolder($path)
     {

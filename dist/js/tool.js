@@ -10960,7 +10960,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
       return $props.search = $event;
     }),
-    placeholder: this.__('Search'),
+    placeholder: _ctx.__('Search'),
     onInput: _cache[10] || (_cache[10] = function () {
       return $options.searchItems && $options.searchItems.apply($options, arguments);
     })

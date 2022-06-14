@@ -103,7 +103,7 @@
                 class="form-control form-input form-input-bordered py-3 ml-auto"
                 type="search"
                 v-model="search"
-                :placeholder="this.__('Search')"
+                :placeholder="__('Search')"
                 @input="searchItems"
             />
         </div>
