@@ -11,7 +11,7 @@ return [
     | This is the storage disk FileManager will use to put file uploads, you can use
     | any of the disks defined in your config/filesystems.php file. Default to public.
      */
-    'disk'      => env('FILEMANAGER_DISK', 'public'),
+    'disk'      => env('FILEMANAGER_DISK', env('FILESYSTEM_DISK')),
 
     /*
     |--------------------------------------------------------------------------
