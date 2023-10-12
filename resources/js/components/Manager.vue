@@ -102,7 +102,7 @@
             <input
                 class="form-control form-input form-input-bordered py-3 ml-auto"
                 type="search"
-                v-model="search"
+                v-model="query"
                 :placeholder="__('Search')"
                 @input="searchItems"
             />
@@ -430,7 +430,7 @@ export default {
         currentDraggedFile: null,
         uploadingFiles: false,
         firstUploadFolder: null,
-        search: '',
+        query: '',
         filterBy: '',
         filteredExtensions: [],
         showFilters: false,
@@ -702,7 +702,7 @@ export default {
             }
         },
         searchItems: _.debounce(function (e) {
-            this.search = e.target.value;
+            this.query = e.target.value;
         }, 300),
     },
     watch: {
@@ -760,8 +760,8 @@ export default {
         },
         filteredFiles() {
             let filtered = this.files;
-            if (this.search) {
-                filtered = this.files.filter(m => m.name.toLowerCase().indexOf(this.search) > -1);
+            if (this.query) {
+                filtered = this.files.filter(m => m.name.toLowerCase().indexOf(this.query) > -1);
             }
             if (this.showFilters && this.filteredExtensions.length > 0) {
                 filtered = _.filter(filtered, file => {

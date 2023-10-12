@@ -1,5 +1,3 @@
-import Tool from './pages/Tool'
-
-Nova.booting((app, store) => {
-    Nova.inertia('Filemanager', Tool)
+Nova.booting((Vue) => {
+    Nova.inertia('Filemanager', require('./pages/Tool').default)
 })

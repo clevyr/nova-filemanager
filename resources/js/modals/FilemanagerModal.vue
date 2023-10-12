@@ -1,8 +1,7 @@
 <template>
-    <Modal :show="active" maxWidth="">
+    <Modal :show="active" size="7xl">
         <div
             class="mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
-            style="max-width: 1200px"
         >
             <ModalHeader class="flex items-center justify-between">
                 <div>
