@@ -30,5 +30,4 @@ Route::controller(FilemanagerToolController::class)
         Route::post('events/folder', 'folderUploadedEvent');
 
         Route::post('uploads/add', 'upload');
-        Route::get('uploads/update', 'updateFile');
 });
