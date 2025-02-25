@@ -26,12 +26,12 @@
         }
     ],
     "require-dev": {
-        "orchestra/testbench": "^8.13",
-        "phpunit/phpunit": "^10.4"
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^11.0"
     },
     "require": {
-        "php": ">=8.1",
-        "laravel/nova": "^4.0"
+        "php": "^8.3|^8.4",
+        "laravel/nova": "^5.0"
     },
     "repositories": [
         {
