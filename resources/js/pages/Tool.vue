@@ -79,7 +79,7 @@
     import DetailModal from '../modals/DetailModal';
     import UploadProgress from '../components/UploadProgress';
     import Manager from '../components/Manager';
-    import { Head as HTMLHead } from '@inertiajs/inertia-vue3'
+    import { Head as HTMLHead } from '@inertiajs/vue3'
 
     export default {
         components: {

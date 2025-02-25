@@ -340,14 +340,13 @@
 
 <script>
 import _ from 'lodash';
-import filesize from 'filesize';
+import { filesize } from 'filesize';
 import MD5 from 'md5';
 import api from '../api';
 import ImageLoader from '../modules/ImageLoader';
 import Folder from '../modules/Folder';
 import { DragAndDrop } from '../tools/DragAndDrop';
 import Upload from "./Upload";
-
 export default {
     components: {
         Upload,
