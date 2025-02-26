@@ -6,59 +6,48 @@
                 <div class="bg-30 flex flex-wrap border-b border-70">
                     <div class="w-3/4 px-4 py-3 ">
                         {{ __('Preview of') }} <span class="text-primary-70%">{{ info.name }}</span>
-
-
                     </div>
 
                     <div class="w-1/4 flex flex-wrap justify-end">
-                        <button class="btn buttons-actions" v-on:click="closePreview">X</button>
+                        <Button
+                            variant="ghost"
+                            @click.prevent="closePreview"
+                        >
+                            X
+                        </Button>
                     </div>
                 </div>
 
                 <div class="flex flex-wrap">
                     <div class="w-3/5 box-preview flex justify-center" :class="cssType">
-
-                        <template v-if="info.type == 'image'">
+                        <template v-if="info.type === 'image'">
                             <ImageInfo :file="info" :preview="true" :css="'card relative w-full flex flex-wrap justify-center items-center overflow-hidden px-0 py-0'"/>
                         </template>
 
-                        <template v-else-if="info.type == 'audio'">
+                        <template v-else-if="info.type === 'audio'">
                             <audio ref="audio" controls>
                                 <source :src="info.src" :type="info.mime"/>
                             </audio>
                         </template>
 
-                        <template v-else-if="info.type == 'video'">
+                        <template v-else-if="info.type === 'video'">
                             <video ref="video" controls crossorigin playsinline>
                                 <source :src="info.url" :type="info.mime"/>
                             </video>
                         </template>
 
-
-                        <template v-else-if="info.type == 'text'">
+                        <template v-else-if="info.type === 'text'">
                             <codemirror v-if="codeLoaded" ref="code" :value="info.source" :options="cmOptions" >
                             </codemirror>
                         </template>
 
-                        <template v-else-if="info.type == 'zip'">
+                        <template v-else-if="info.type === 'zip'">
                             <TreeView v-if="zipLoaded" :json="info.source" :name="info.name">
                             </TreeView>
                         </template>
 
-                        <!-- <template v-else-if="info.type == 'word'">
-                            <iframe :src="'https://view.officeapps.live.com/op/embed.aspx?src='+info.url" width="100%" height="100%" style="border: none;">
-                                <object class="no-preview" v-html="info.image"></object>
-                            </iframe>
-                        </template> -->
-
-                        <template v-else-if="info.type == 'pdf'">
-                            <object :data="info.url" type="application/pdf" width="100%" height="100%">
-                                <iframe :src="info.url" width="100%" height="100%" style="border: none;">
-                                    <object class="no-preview" v-html="info.image">
-
-                                    </object>
-                                </iframe>
-                            </object>
+                        <template v-else-if="field.type === 'pdf'">
+                            <embed type="application/pdf" :src="field.url" class="w-full max-w-screen" style="height: 80vh;" />
                         </template>
 
                         <template v-else>
@@ -66,11 +55,9 @@
 
                             </object>
                         </template>
-
-
                     </div>
-                    <div class="w-2/5 bg-30 box-info flex flex-wrap">
 
+                    <div class="w-2/5 bg-30 box-info flex flex-wrap">
                         <div class="info-data w-full">
                             <div class="info mx-4 my-3 flex flex-wrap items-center">
                                 <span class="title bg-50 px-1 py-1 rounded-l">{{ __('Name') }}:</span>
@@ -83,7 +70,7 @@
 
                                     <template v-if="editingName">
 
-                                        <input type="text"  v-bind:ref="'inputName'" :style="{ 'width': nameWidth + 'px' }" v-model="nameNoExtension" class=" value px-1 py-1 rounded-r">
+                                        <input type="text" :ref="'inputName'" :style="{ 'width': nameWidth + 'px' }" v-model="nameNoExtension" class=" value px-1 py-1 rounded-r">
 
                                         <svg @click="rename" xmlns="http://www.w3.org/2000/svg" class="ml-1 cursor-pointer text-success fill-current" viewBox="0 0 20 20" width="12" height="12"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
 
@@ -91,9 +78,6 @@
 
                                     </template>
                                 </template>
-
-
-
                             </div>
 
                             <div class="info mx-4 my-3 flex flex-wrap" v-if="info.mime">
@@ -124,7 +108,11 @@
                                 <div class="flex flex-wrap items-stretch w-full mb-4 relative">
                                     <input type="text" class="flex-shrink flex-grow flex-auto text-xs leading-normal w-px flex-1 border border-70 rounded rounded-r-none px-1 relative" :value="info.url" disabled>
                                     <div class="flex -mr-px">
-                                        <button class="copy flex items-center leading-normal bg-50 rounded rounded-l-none border border-l-0 border-70 px-3 whitespace-no-wrap text-grey-dark text-xs" v-copy="info.url" v-copy:callback="onCopy">{{ __('Copy') }}</button>
+                                        <Button
+                                            v-copy="info.url"
+                                            v-copy:callback="onCopy">
+                                            {{ __('Copy') }}
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
@@ -155,19 +143,14 @@
 
 
                                 <template v-if="popup">
-                                    <button @click="selectFile" class="btn btn-default btn-primary">
+                                    <Button @click.prevent="selectFile">
                                         {{ __('Select file') }}
-                                    </button>
+                                    </Button>
                                 </template>
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
             </div>
         </modal>
     </portal>
@@ -182,6 +165,7 @@ import { copy } from 'v-copy';
 import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
 import { codemirror } from 'vue-codemirror';
+import { Button } from 'laravel-nova-ui';
 
 //themes
 import 'codemirror/lib/codemirror.css';
@@ -233,6 +217,7 @@ export default {
         ConfirmationButton: ConfirmationButton,
         codemirror: codemirror,
         TreeView: TreeView,
+        Button,
     },
 
     directives: {

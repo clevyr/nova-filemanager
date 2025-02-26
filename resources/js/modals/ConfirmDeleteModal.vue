@@ -2,11 +2,11 @@
     <Modal :show="active" @closing="handleClose" @close-via-escape="handleClose">
         <div class="mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
             <ModalHeader
-                v-text="`${type == 'folder' ? __('Remove folder') : __('Remove file')}: ${name}`"
+                v-text="`${type === 'folder' ? __('Remove folder') : __('Remove file')}: ${name}`"
             />
 
             <div class="p-6">
-                <template v-if="type == 'folder'">
+                <template v-if="type === 'folder'">
                     <p>
                         {{ __('Are you sure you want to remove this folder?') }}
                     </p>
@@ -26,30 +26,26 @@
 
             <ModalFooter>
                 <div class="flex items-center ml-auto">
-                    <CancelButton
-                        component="button"
-                        type="button"
+                    <Button
                         dusk="cancel-action-button"
                         class="ml-auto mr-3"
+                        variant="outline"
                         @click.prevent="handleClose"
-                    />
+                    >
+                        {{ __('Cancel') }}
+                    </Button>
 
-                    <LoadingButton
+                    <Button
                         ref="confirmButton"
                         type="submit"
-                        component="DangerButton"
                         dusk="confirm-button"
                         :disabled="isDeleting"
                         :loading="isDeleting"
+                        state="danger"
                         @click.prevent="deleteData"
                     >
-                        <template v-if="isDeleting">
-                            {{ __('Deleting') }}
-                        </template>
-                        <template v-else>
-                            {{ __('Delete') }}
-                        </template>
-                    </LoadingButton>
+                        {{ __('Delete') }}
+                    </Button>
                 </div>
             </ModalFooter>
         </div>
@@ -58,8 +54,11 @@
 
 <script>
     import api from '../api';
-
+    import { Button } from 'laravel-nova-ui';
     export default {
+        components: {
+            Button
+        },
         data: () => ({
             active: false,
             name: null,
@@ -69,7 +68,6 @@
             errorMsg: '',
             isDeleting: false,
         }),
-
         methods: {
             openModal(type, path) {
                 this.type = type;

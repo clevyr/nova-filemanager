@@ -11,9 +11,9 @@
                     </span>
                 </div>
 
-                <OutlineButton @click="closePreview">
-                   <Icon type="x" width="16" height="16" />
-                </OutlineButton>
+                <Button variant="ghost" @click.prevent="closePreview">
+                   <Icon name="x" width="16" height="16" />
+                </Button>
             </ModalHeader>
 
             <div class="flex flex-col md:flex-row">
@@ -34,7 +34,7 @@
                                     v-if="!editingName"
                                     width="16"
                                     height="16"
-                                    type="pencil-alt"
+                                    name="pencil-alt"
                                     @click="editName"
                                     class="ml-2 cursor-pointer hover:opacity-50 flex-shrink-0"
                                 />
@@ -50,7 +50,7 @@
                                     <Icon
                                         width="16"
                                         height="16"
-                                        type="check-circle"
+                                        name="check-circle"
                                         @click="rename"
                                         class="ml-2 text-green-500 cursor-pointer hover:opacity-50 flex-shrink-0"
                                     />
@@ -58,7 +58,7 @@
                                     <Icon
                                         width="16"
                                         height="16"
-                                        type="x-circle"
+                                        name="x-circle"
                                         @click="editingName = !editingName"
                                         class="ml-2 cursor-pointer hover:opacity-50 flex-shrink-0"
                                     />
@@ -107,7 +107,7 @@
                             <Icon
                                 width="16"
                                 height="16"
-                                type="clipboard"
+                                name="clipboard"
                                 @click="copyTextToClipboard"
                                 class="ml-2 cursor-pointer hover:opacity-50 flex-shrink-0"
                             />
@@ -115,45 +115,46 @@
                     </div>
 
                     <div class="grid md:grid-cols-12 gap-4">
-                        <DefaultButton class="md:col-span-4" v-if="popup" @click="selectFile">
+                        <Button class="md:col-span-4" v-if="popup" @click.prevent="selectFile">
                             <Icon
-                                type="check-circle"
+                                name="check-circle"
                                 class="mr-1"
                                 width="18"
                                 height="18"
                             />
 
                             {{ __('Choose') }}
-                        </DefaultButton>
+                        </Button>
 
                         <a
                             class="md:col-span-4 flex"
                             v-if="buttons.download_file"
                             :href="`/nova-vendor/clevyr/nova-filemanager/actions/download-file?file=${this.info.path}`"
                         >
-                            <DefaultButton class="flex-grow">
+                            <Button class="flex-grow">
                                 <Icon
-                                    type="download"
+                                    name="download"
                                     class="mr-1"
                                     width="18"
                                     height="18"
                                 />
 
                                 {{ __('Download') }}
-                            </DefaultButton>
+                            </Button>
                         </a>
 
                         <ConfirmationButton
                             class="md:col-span-4"
+                            state="danger"
                             v-if="buttons.delete_file"
                             :messages="[__('Delete'), __('Are you sure?'), __('Deleting...')]"
                             @success="removeFile"
-                        >
+                        >r
                             <template v-slot:start>
-                                <Icon type="trash" class="mr-1" width="18" height="18" />
+                                <Icon name="trash" class="mr-1" width="18" height="18" />
                             </template>
                             <template v-slot:finish>
-                                <Icon type="check" class="mr-1" width="18" height="18" />
+                                <Icon name="check" class="mr-1" width="18" height="18" />
                             </template>
                         </ConfirmationButton>
 
@@ -164,10 +165,10 @@
                             @success="duplicate"
                         >
                             <template v-slot:start>
-                                <Icon type="duplicate" class="mr-1" width="18" height="18" />
+                                <Icon name="duplicate" class="mr-1" width="18" height="18" />
                             </template>
                             <template v-slot:finish>
-                                <Icon type="check" class="mr-1" width="18" height="18" />
+                                <Icon name="check" class="mr-1" width="18" height="18" />
                             </template>
                         </ConfirmationButton>
                     </div>
@@ -182,6 +183,7 @@
     import MimeIconsEnum from '../tools/MimeIconsEnum'
     import ConfirmationButton from '../components/ConfirmationButton'
     import DetailView from '../modules/DetailView'
+    import { Button, Icon } from 'laravel-nova-ui';
 
     export default {
         props: {
@@ -211,6 +213,8 @@
         components: {
             ConfirmationButton: ConfirmationButton,
             DetailView: DetailView,
+            Button: Button,
+            Icon: Icon,
         },
 
         emits: ['refresh', 'closePreview', 'rename', 'selectFile'],

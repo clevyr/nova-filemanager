@@ -57,12 +57,9 @@
                 @open-modal="openFilemanagerModal"
             ></FileSelect>
 
-            <DangerButton v-if="value" @click.prevent="openRemoveModal">
-                <Icon type="trash" width="16" height="16" />
-                <span class="ml-2">
-                    {{ __('Delete') }}
-                </span>
-            </DangerButton>
+            <Button v-if="value" icon="trash" @click.prevent="openRemoveModal">
+                {{ __('Delete') }}
+            </Button>
 
             <ConfirmRemoveFileModal
                 :active="removeModalOpen"
@@ -91,6 +88,7 @@ import ConfirmDeleteModal from '../modals/ConfirmDeleteModal';
 import RenameModal from '../modals/RenameModal';
 import UploadProgress from '../components/UploadProgress';
 import FileSelect from './custom/FileSelect';
+import { Button, Icon } from 'laravel-nova-ui';
 import api from '../api';
 export default {
     mixins: [DependentFormField, HandlesValidationErrors],
@@ -103,6 +101,8 @@ export default {
         ConfirmRemoveFileModal: ConfirmRemoveFileModal,
         RenameModal: RenameModal,
         ConfirmDeleteModal: ConfirmDeleteModal,
+        Button: Button,
+        Icon: Icon
     },
     data: () => ({
         openModal: false,

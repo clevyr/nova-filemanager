@@ -1,6 +1,5 @@
 <template>
     <transition name="fade">
-
         <div
             ref="card"
             :loading="loading"
@@ -41,7 +40,6 @@ import { Minimum } from 'laravel-nova';
 
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css';
-
 export default {
     components: {
         Viewer,

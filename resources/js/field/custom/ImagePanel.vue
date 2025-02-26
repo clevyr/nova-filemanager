@@ -10,11 +10,11 @@
         <div class="w-3/4 py-4 text-90 flex items-center">
             <slot name="value">
 
-                <template v-if="field.type == 'image'">
+                <template v-if="field.type === 'image'">
                     <ImageDetail v-if="loaded" :file="field" :css="'card relative card relative border border-lg border-50 overflow-hidden px-0 py-0 max-w-xs'"></ImageDetail>
                     <div class="ml-2">{{ field.path }}</div>
                 </template>
-            
+
                 <template v-else>
                     <object class="no-preview" v-html="field.image">
                     </object>

@@ -18,7 +18,7 @@
                 class="flex-grow flex items-center justify-center p-4"
                 style="height: 160px"
             >
-                <Icon :type="mimeIcons[file.mime] || mimeIcons.dir" width="48" height="48" />
+                <Icon :name="mimeIcons[file.mime] || mimeIcons.dir" width="48" height="48" />
             </div>
 
             <div
@@ -46,14 +46,14 @@
                             v-if="renamePermission"
                             @click.prevent="editFolder($event)"
                         >
-                            <Icon type="pencil-alt" width="18" height="18" />
+                            <Icon name="pencil-alt" width="18" height="18" />
                         </div>
                         <div
                             class="h-8 w-8 cursor-pointer hover:opacity-50 border-l border-gray-200 dark:border-gray-700 px-2 inline-flex items-center justify-center"
                             v-if="deletePermission"
                             @click.prevent="deleteFolder($event)"
                         >
-                            <Icon type="trash" class="text-red-500" width="18" height="18" />
+                            <Icon name="trash" class="text-red-500" width="18" height="18" />
                         </div>
                     </template>
                 </div>
@@ -61,7 +61,7 @@
         </div>
     </template>
 
-    <template v-if="view == 'list'">
+    <template v-if="view === 'list'">
         <tr @click="clickStrategy" :loading="loading" v-bind:key="file.id" class="cursor-pointer">
             <td
                 v-if="multiSelecting"
@@ -105,7 +105,7 @@
                 </div>
 
                 <div class="flex-grow flex items-center justify-start">
-                    <Icon :type="mimeIcons[file.mime] || mimeIcons.dir" width="32" height="32" />
+                    <Icon :name="mimeIcons[file.mime] || mimeIcons.dir" width="32" height="32" />
                 </div>
             </td>
 
@@ -121,9 +121,9 @@
                 {{ file.date || '-' }}
             </td>
             <td class="text-center py-1 pl-2 border-t border-gray-100 dark:border-gray-700 whitespace-nowrap cursor-pointer dark:bg-gray-800 group-hover:bg-gray-50 dark:group-hover:bg-gray-900">
-                <div class="flex items-center justify-end" v-if="file.id != 'folder_back'">
+                <div class="flex items-center justify-end" v-if="file.id !== 'folder_back'">
                     <Icon
-                        type="pencil-alt"
+                        name="pencil-alt"
                         width="20"
                         height="20"
                         class="cursor-pointer hover:opacity-50 mr-2"
@@ -132,7 +132,7 @@
                     />
 
                     <Icon
-                        type="trash"
+                        name="trash"
                         width="20"
                         height="20"
                         class="cursor-pointer hover:opacity-50 text-red-500"
@@ -148,7 +148,9 @@
 <script>
 import findIndex from 'lodash/findIndex'
 import MimeIconsEnum from '../tools/MimeIconsEnum'
+import { Icon } from "laravel-nova-ui";
 export default {
+    components: {Icon},
     props: {
         file: {
             type: Object,

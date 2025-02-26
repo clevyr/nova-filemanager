@@ -1,7 +1,7 @@
 <template>
     <component
         ref="button"
-        v-bind="{ size, align, ...$attrs }"
+        v-bind="{ size, align, state, ...$attrs }"
         :is="component"
         :disabled="stepsComplete"
         @click="incrementStep()"
@@ -13,11 +13,17 @@
 </template>
 
 <script>
+import { Button } from 'laravel-nova-ui';
+
 export default {
     props: {
         size: {
             type: String,
-            default: 'lg',
+            default: 'large',
+        },
+        state: {
+            type: String,
+            default: 'default',
         },
         align: {
             type: String,
@@ -26,12 +32,15 @@ export default {
         },
         component: {
             type: String,
-            default: 'DangerButton',
+            default: 'Button',
         },
         messages: {
             type: Array,
             default: [],
         },
+    },
+    components: {
+        Button,
     },
     data() {
         return {

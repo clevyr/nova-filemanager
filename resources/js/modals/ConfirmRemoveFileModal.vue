@@ -18,20 +18,22 @@
 
             <ModalFooter>
                 <div class="flex items-center ml-auto">
-                    <CancelButton
-                        component="button"
-                        type="button"
+                    <Button
                         dusk="cancel-action-button"
                         class="ml-auto mr-3"
+                        variant="outline"
                         @click.prevent="handleClose"
-                    />
+                    >
+                        {{ __('Cancel') }}
+                    </Button>
 
-                    <DangerButton
+                    <Button
                         ref="confirmButton"
+                        state="danger"
                         @click.prevent="handleConfirm"
                     >
                         {{ __('Deselect') }}
-                    </DangerButton>
+                    </Button>
                 </div>
             </ModalFooter>
         </div>
@@ -39,6 +41,8 @@
 </template>
 
 <script>
+    import { Button } from 'laravel-nova-ui';
+
     export default {
         props: {
             active: {
@@ -46,6 +50,9 @@
                 required: true,
                 type: Boolean,
             },
+        },
+        components: {
+            Button
         },
 
         mounted() {

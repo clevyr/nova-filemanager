@@ -149,7 +149,7 @@ export default {
             data.append('file', file.file);
             data.append('current', this.current + '/' + filePath);
             data.append('visibility', this.visibility);
-            if (this.type == 'files') {
+            if (this.type === 'files') {
                 data.append('rules', JSON.stringify(this.rules));
                 this.uploadFileToServer(file, data, config);
             } else {

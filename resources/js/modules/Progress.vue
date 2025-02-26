@@ -3,7 +3,7 @@
         <div
             class="progress-bar file"
             :style="{ width: progressByFile }"
-            v-if="type == 'files'"
+            v-if="type === 'files'"
         ></div>
         <div class="progress-bar percent" :style="{ width: progressByPercent }" v-else></div>
     </div>

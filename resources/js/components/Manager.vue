@@ -5,62 +5,65 @@
         v-cloak
     >
         <div class="flex p-4 mb-4 flex-wrap border-b border-gray-200 dark:border-gray-700">
-            <OutlineButton
+            <Button
+                variant="outline"
                 @click="$emit('refresh')"
                 class="mr-2"
-                :class="{ rotate: loading }"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current" viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M6 18.7V21a1 1 0 0 1-2 0v-5a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2H7.1A7 7 0 0 0 19 12a1 1 0 1 1 2 0 9 9 0 0 1-15 6.7zM18 5.3V3a1 1 0 0 1 2 0v5a1 1 0 0 1-1 1h-5a1 1 0 0 1 0-2h2.9A7 7 0 0 0 5 12a1 1 0 1 1-2 0 9 9 0 0 1 15-6.7z" />
-                </svg>
-            </OutlineButton>
+                icon="refresh"
+                :loading="loading"
+            />
 
             <label
                 v-if="buttons.upload_button"
                 class="mr-2"
             >
-                <span
-                    class="shadow bg-primary-500 hover:bg-primary-400 text-white dark:text-gray-900 cursor-pointer rounded text-sm font-bold focus:outline-none focus:ring ring-primary-200 dark:ring-gray-600 inline-flex items-center justify-center h-9 px-3">
+                <Button
+                    @click="$refs.uploadInput.click()"
+                >
                     {{ __('Upload') }}
-                </span>
+                </Button>
                 <input
                     type="file"
                     class="hidden"
+                    ref="uploadInput"
                     multiple="true"
                     @change="uploadFilesByButton"
                 />
             </label>
 
-            <DefaultButton
+            <Button
                 v-if="buttons.create_folder"
                 @click.prevent.stop="$emit('createFolder')"
                 class="mr-2"
             >
                 {{ __('Create folder') }}
-            </DefaultButton>
+            </Button>
 
-            <OutlineButton
-                v-if="view == 'list'"
+            <Button
+                v-if="view === 'list'"
+                variant="outline"
                 @click="viewAs('grid')"
                 class="mr-2"
+                icon="list"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="fill-current"  viewBox="0 0 24 24" width="24" height="24">
                     <path d="M5 3h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5h-4zM5 13h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4h-4z" />
                 </svg>
-            </OutlineButton>
+            </Button>
 
-            <OutlineButton
-                v-if="view == 'grid'"
+            <Button
+                v-if="view === 'grid'"
+                variant="outline"
                 @click="viewAs('list')"
-                class="mr-2"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="fill-current"  viewBox="0 0 20 20" width="20" height="20">
                     <path d="M1 4h2v2H1V4zm4 0h14v2H5V4zM1 9h2v2H1V9zm4 0h14v2H5V9zm-4 5h2v2H1v-2zm4 0h14v2H5v-2z" />
                 </svg>
-            </OutlineButton>
+            </Button>
 
-            <OutlineButton
+            <Button
                 v-if="buttons.select_multiple"
+                variant="outline"
                 @click="multiSelecting = !multiSelecting"
                 class="mr-2"
             >
@@ -75,15 +78,16 @@
                 <span v-if="selectedFiles.length > 0" class="ml-2 text-sm">
                     {{ selectedFiles.length }}
                 </span>
-            </OutlineButton>
+            </Button>
 
-            <DangerButton
+            <Button
                 v-if="multiSelecting && selectedFiles.length > 0"
+                state="danger"
                 @click="$emit('multiDelete')"
                 class="mr-2"
             >
-                <Icon type="trash" width="20" height="20" />
-            </DangerButton>
+                <Icon name="trash" width="20" height="20" />
+            </Button>
 
             <SelectControl
                 v-if="showFilters"
@@ -184,17 +188,18 @@
                         {{ __(`No ${filter || 'files or folders'} in current directory`) }}
                     </Heading>
 
-                    <DangerButton
+                    <Button
                         v-if="buttons.delete_folder && !filter"
+                        state="danger"
                         @click="removeDirectory"
                     >
                         {{ __('Remove directory') }}
-                    </DangerButton>
+                    </Button>
                 </div>
             </div>
 
             <template v-if="!files.error">
-                <template v-if="view == 'grid'">
+                <template v-if="view === 'grid'">
                     <div
                         v-if="parent.id"
                         :class="filemanagerClass"
@@ -215,7 +220,7 @@
                         :key="file.id"
                         :class="filemanagerClass"
                     >
-                        <template v-if="file.type == 'file'">
+                        <template v-if="file.type === 'file'">
                             <ImageLoader
                                 :ref="'file_' + file.id"
                                 :file="file"
@@ -234,7 +239,7 @@
                                 @select="select"
                             />
                         </template>
-                        <template v-if="file.type == 'dir'">
+                        <template v-if="file.type === 'dir'">
                             <Folder
                                 :ref="'folder_' + file.id"
                                 :file="file"
@@ -255,7 +260,7 @@
                     </div>
                 </template>
 
-                <div class="p-2 w-full" v-else-if="view == 'list'">
+                <div class="p-2 w-full" v-else-if="view === 'list'">
                     <table class="w-full table-default" v-if="files.length > 0">
                         <thead>
                         <tr>
@@ -292,7 +297,7 @@
                         </template>
 
                         <template v-for="file in filteredFiles">
-                            <template v-if="file.type == 'dir'">
+                            <template v-if="file.type === 'dir'">
                                 <Folder
                                     :ref="'folder_' + file.id"
                                     :file="file"
@@ -310,7 +315,7 @@
                                     @select="select"
                                 />
                             </template>
-                            <template v-if="file.type == 'file'">
+                            <template v-if="file.type === 'file'">
                                 <ImageLoader
                                     :ref="'file_' + file.id"
                                     :file="file"
@@ -347,11 +352,14 @@ import ImageLoader from '../modules/ImageLoader';
 import Folder from '../modules/Folder';
 import { DragAndDrop } from '../tools/DragAndDrop';
 import Upload from "./Upload";
+import { Button, Icon } from 'laravel-nova-ui';
 export default {
     components: {
         Upload,
         ImageLoader,
         Folder,
+        Button,
+        Icon,
     },
     props: {
         files: {

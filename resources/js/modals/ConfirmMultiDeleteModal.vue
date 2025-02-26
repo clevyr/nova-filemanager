@@ -14,30 +14,26 @@
 
             <ModalFooter>
                 <div class="flex items-center ml-auto">
-                    <CancelButton
-                        component="button"
-                        type="button"
+                    <Button
                         dusk="cancel-action-button"
                         class="ml-auto mr-3"
+                        variant="outline"
                         @click.prevent="handleClose"
-                    />
+                    >
+                        {{ __('Cancel') }}
+                    </Button>
 
-                    <LoadingButton
+                    <Button
                         ref="confirmButton"
-                        component="DangerButton"
                         type="submit"
                         dusk="confirm-button"
                         :disabled="isDeleting"
                         :loading="isDeleting"
+                        state="danger"
                         @click.prevent="deleteData"
                     >
-                        <template v-if="isDeleting">
-                            {{ __('Deleting') }}
-                        </template>
-                        <template v-else>
-                            {{ __('Delete') }}
-                        </template>
-                    </LoadingButton>
+                        {{ __('Delete') }}
+                    </Button>
                 </div>
             </ModalFooter>
         </div>
@@ -46,7 +42,7 @@
 
 <script>
     import api from '../api';
-
+    import { Button } from 'laravel-nova-ui';
     export default {
         props: {
             selectedFiles: {
@@ -54,7 +50,9 @@
                 required: true,
             },
         },
-
+        components: {
+            Button
+        },
         data: () => ({
             active: false,
             error: false,

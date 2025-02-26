@@ -49,15 +49,16 @@
 
             <ModalFooter>
                 <div class="flex items-center ml-auto">
-                    <CancelButton
-                        component="button"
-                        type="button"
+                    <Button
                         dusk="cancel-action-button"
                         class="ml-auto mr-3"
+                        variant="outline"
                         @click.prevent="cancelRename"
-                    />
+                    >
+                        {{ __('Cancel') }}
+                    </Button>
 
-                    <LoadingButton
+                    <Button
                         ref="confirmButton"
                         type="submit"
                         dusk="confirm-button"
@@ -65,13 +66,8 @@
                         :loading="isSaving"
                         @click.prevent="renamePath"
                     >
-                        <template v-if="isSaving">
-                            {{ __('Renaming') }}
-                        </template>
-                        <template v-else>
-                            {{ __('Rename') }}
-                        </template>
-                    </LoadingButton>
+                        Rename
+                    </Button>
                 </div>
             </ModalFooter>
         </div>
@@ -80,10 +76,14 @@
 
 <script>
     import api from '../api';
+    import { Button } from 'laravel-nova-ui'
 
     export default {
         props: {
             //
+        },
+        components: {
+            Button,
         },
 
         data: () => ({

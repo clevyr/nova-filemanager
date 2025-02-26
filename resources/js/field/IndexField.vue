@@ -1,12 +1,12 @@
 <template>
     <div>
-        <template v-if="display == 'normal'">
+        <template v-if="display === 'normal'">
             <span>{{ field.value }}</span>
         </template>
         <template v-else>
             <template v-if="field.image">
                 <img
-                    v-if="field.type == 'image'"
+                    v-if="field.type === 'image'"
                     :src="field.image"
                     style="object-fit: cover"
                     class="w-8 h-8"

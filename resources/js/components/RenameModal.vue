@@ -20,22 +20,35 @@
                             <input type="text" class="flex-shrink flex-grow flex-auto h-full form-control form-input form-input-bordered-left py-3" :placeholder="nameWithoutExtension" v-model="nameWithoutExtension" autofocus required v-on:keyup.enter="renamePath">
                             <div class="flex -mr-px">
                                 <span class="flex items-center leading-normal bg-50 rounded rounded-l-none form-input-bordered-right px-3 whitespace-no-wrap text-grey-dark text-sm">{{ extension }}</span>
-                            </div>  
+                            </div>
                         </div>
-                            
+
                         <p class="my-2 text-danger" v-if="error">{{ errorMsg }}</p>
 
                     </template>
-                    
+
                 </div>
 
                 <div class="bg-30 px-6 py-3 flex">
                     <div class="ml-auto">
-                        <button type="button" data-testid="cancel-button" @click.prevent="cancelRename" class="btn text-80 font-normal h-9 px-3 mr-3 btn-link">{{ __('Cancel') }}</button>
-                        <button ref="confirmButton" data-testid="confirm-button" :disabled="isSaving" @click.prevent="renamePath" class="btn btn-default btn-primary" :class="{ 'cursor-not-allowed': isSaving, 'opacity-50': isSaving }">
-                            <span v-if="isSaving">{{ __('Renaming') }}</span>
-                            <span v-else>{{ __('Rename') }}</span>
-                        </button>
+                        <Button
+                            type="button"
+                            variant="link"
+                            data-testid="cancel-button"
+                            @click.prevent="cancelRename"
+                        >
+                            {{ __('Cancel') }}
+                        </Button>
+
+                        <Button
+                            ref="confirmButton"
+                            data-testid="confirm-button"
+                            :disabled="isSaving"
+                            :loading="isSaving"
+                            @click.prevent="renamePath"
+                        >
+                            {{ __('Rename') }}
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -45,12 +58,15 @@
 
 <script>
 import api from '../api';
+import { Button } from 'laravel-nova-ui'
 
 export default {
     props: {
         //
     },
-
+    components: {
+        Button,
+    },
     data: () => ({
         active: false,
         name: null,

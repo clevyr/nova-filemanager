@@ -6,6 +6,7 @@ mix.extend('nova', new NovaExtension())
 mix
   .setPublicPath('dist')
   .js('resources/js/tool.js', 'js')
+  .js('resources/js/field.js', 'js')
   .css('resources/css/tool.css', 'css')
   .vue({ version: 3 })
   .nova('clevyr/nova-filemanager')

@@ -10,11 +10,23 @@
 
                 <div class="bg-30 px-6 py-3 flex">
                     <div class="ml-auto">
-                        <button type="button" data-testid="cancel-button" @click.prevent="cancelCreate" class="btn text-80 font-normal h-9 px-3 mr-3 btn-link">{{ __('Cancel') }}</button>
-                        <button ref="confirmButton" data-testid="confirm-button" :disabled="isSaving" @click.prevent="createFolder" class="btn btn-default btn-primary" :class="{ 'cursor-not-allowed': isSaving, 'opacity-50': isSaving }">
-                            <span v-if="isSaving">{{ __('Creating') }}</span>
-                            <span v-else>{{ __('Create') }}</span>
-                        </button>
+                        <Button
+                            data-testid="cancel-button"
+                            variant="link"
+                            @click.prevent="cancelCreate"
+                        >
+                            {{ __('Cancel') }}
+                        </Button>
+
+                        <Button
+                            ref="confirmButton"
+                            data-testid="confirm-button"
+                            :disabled="isSaving"
+                            :loading="isSaving"
+                            @click.prevent="createFolder"
+                        >
+                            {{ __('Create') }}
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -24,6 +36,7 @@
 
 <script>
 import api from '../api';
+import { Button } from 'laravel-nova-ui'
 
 export default {
     props: {
@@ -38,7 +51,9 @@ export default {
             required: true,
         },
     },
-
+    components: {
+        Button,
+    },
     data: () => ({
         folderName: null,
         error: false,

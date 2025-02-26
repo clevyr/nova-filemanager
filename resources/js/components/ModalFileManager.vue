@@ -28,15 +28,27 @@
                                     <input type="file" multiple="true" @change="uploadFilesByButton"/>
                                 </label>
 
-                                <button  v-if="buttons.create_folder" @click="showModalCreateFolder" class="btn btn-default btn-primary mr-3">
+                                <Button
+                                    v-if="buttons.create_folder"
+                                    @click="showModalCreateFolder"
+                                    class="mr-3"
+                                >
                                     {{ __('Create folder') }}
-                                </button>
+                                </Button>
 
-                                <button v-if="view == 'list'" @click="viewAs('grid')" class="btn btn-default btn-small btn-primary text-white mr-3">
+                                <Button
+                                    v-if="view === 'list'"
+                                    @click="viewAs('grid')"
+                                    class="mr-3"
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M5 3h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v4h4V5h-4zM5 13h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4H5zm10-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4c0-1.1.9-2 2-2zm0 2v4h4v-4h-4z"/></svg>
-                                </button>
+                                </Button>
 
-                                <button v-if="view == 'grid'" @click="viewAs('list')" class="btn btn-default btn-small btn-primary text-white mr-3">
+                                <button
+                                    v-if="view === 'grid'"
+                                    @click="viewAs('list')"
+                                    class="mr-3"
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20"><path d="M1 4h2v2H1V4zm4 0h14v2H5V4zM1 9h2v2H1V9zm4 0h14v2H5V9zm-4 5h2v2H1v-2zm4 0h14v2H5v-2z"/></svg>
                                 </button>
                             </div>
@@ -113,6 +125,8 @@ import UploadProgress from './UploadProgress';
 import ConfirmModalDelete from './ConfirmModalDelete';
 import RenameModal from './RenameModal';
 
+import { Button } from 'laravel-nova-ui'
+
 export default {
     props: {
         resource: {
@@ -167,6 +181,7 @@ export default {
         RenameModal,
         Upload,
         UploadProgress,
+        Button,
     },
 
     data: () => ({

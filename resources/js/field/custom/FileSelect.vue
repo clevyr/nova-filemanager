@@ -2,19 +2,20 @@
     <div class="flex items-stretch w-full mb-2 relative">
         <input
             type="text"
-            class="w-full mr-4 form-control form-input form-input-bordered"
+            class="w-full form-control form-input form-control-bordered mr-4"
             :placeholder="__('Select a file')"
             :value="value"
             :disabled="isReadonly"
         />
 
-        <DefaultButton class="whitespace-nowrap nowrap" @click.prevent="openModalFilemanager">
+        <Button class="whitespace-nowrap nowrap" @click.prevent="openModalFilemanager">
             {{ __('Open FileManager') }}
-        </DefaultButton>
+        </Button>
     </div>
 </template>
 
 <script setup>
+import { Button } from 'laravel-nova-ui';
 const props = defineProps({
     value: {
         type: String,

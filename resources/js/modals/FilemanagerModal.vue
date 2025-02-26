@@ -8,9 +8,9 @@
                     {{ __('FileManager') }}
                 </div>
 
-                <OutlineButton @click="closeModal">
-                    <Icon type="x" width="16" height="16" />
-                </OutlineButton>
+                <Button variant="ghost" @click.prevent="closeModal">
+                    <Icon name="x" width="16" height="16" />
+                </Button>
             </ModalHeader>
 
             <Manager
@@ -55,6 +55,8 @@
 
     import ConfirmDeleteModal from './ConfirmDeleteModal';
     import RenameModal from './RenameModal';
+
+    import { Button, Icon } from 'laravel-nova-ui'
 
     export default {
         props: {
@@ -111,6 +113,8 @@
             Manager,
             Upload,
             UploadProgress,
+            Button,
+            Icon,
         },
 
         data: () => ({
