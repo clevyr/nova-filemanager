@@ -1,6 +1,6 @@
-# Filemanager tool for Laravel Nova 4
+# Filemanager tool for Laravel Nova 5
 
-A Filemanager Tool and Field for Laravel Nova 4
+A Filemanager Tool and Field for Laravel Nova 5
 
 ##### Filemanager Tool preview
 
@@ -12,7 +12,7 @@ A Filemanager Tool and Field for Laravel Nova 4
 
 ## Clevyr Nova Filemanager
 
-This package will be maintained and updated by Clevyr going forward. This package is currently compatible with Nova 3 and Laravel 9.
+This package will be maintained and updated by Clevyr going forward. This package is currently compatible with Nova 5 and Laravel 11 & 12.
 
 ### Docs
 Forked from https://github.com/stepanenko3/nova-filemanager, which is a fork of https://github.
