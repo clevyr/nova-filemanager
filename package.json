@@ -13,7 +13,7 @@
         "laravel-nova-devtool": "file:vendor/laravel/nova-devtool"
     },
     "dependencies": {
-        "filesize": "^10.1.0",
+        "filesize": "^11.0.0",
         "md5": "^2.2.1",
         "urijs": "^1.19.1",
         "vue3-dropzone": "^2.1.2"
